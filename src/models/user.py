@@ -3,6 +3,24 @@ from marshmallow import fields
 from marshmallow.validate import Regexp
 
 class User(db.Model):
+    """
+    Represents a user in the database.
+
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the user.
+    username : str
+        Username chosen by the user. Must be unique.
+    email : str
+        Email associated with the user.
+    password_hash : str
+        Hashed password for the user.
+    profile_picture : str
+        URL of the user's profile picture.
+    bio : str
+        User's bio.
+    """
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
