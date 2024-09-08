@@ -71,7 +71,7 @@ These relationships help ensure data integrity and consistency in the database.
 * **Like:** `id`, `user_id`, `post_id`, `created_at`
 * **Follow:** `id`, `follower_id`, `followed_id`
 
-###Relationships: 
+### Relationships: 
 
 * A `User` has many `Posts`, `Comments`, and `Likes`.
 * A `Post` belongs to a `User` and can have many `Comments` and `Likes`.
