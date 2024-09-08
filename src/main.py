@@ -3,7 +3,7 @@ from init import db, ma, bcrypt, jwt
 
 from flask import Flask
 
-def create_app():
+def create_app()
 
     app = Flask(__name__)
     app.json.sort_keys = False
