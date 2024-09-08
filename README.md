@@ -37,7 +37,7 @@
 * **Learning curve:** Can be more complex to learn and configure compared to simpler databases.
 * **Performance:** May require optimisation for very large datasets or high-traffic applications.
 
-## R5: ORM Features and Functionalities
+## ORM Features and Functionalities
 
 ### SQLAlchemy:
 
@@ -47,7 +47,7 @@
 * **Migrations:** Automatically generates database schema changes based on model modifications.
 * **Declarative syntax:** Uses a declarative style for defining models and relationships.
 
-## R6: Entity Relationship Diagram (ERD)
+## Entity Relationship Diagram (ERD)
 
 ![ERD](./docs/erd.png)
 
@@ -61,7 +61,7 @@ The ERD illustrates the relationships between entities in the database:
 
 These relationships help ensure data integrity and consistency in the database.
 
-## R7: Implemented Models and Relationships
+## Implemented Models and Relationships
 
 ### Models:
 
@@ -79,52 +79,394 @@ These relationships help ensure data integrity and consistency in the database.
 * A `Like` belongs to a `User` and a `Post`.
 * A `Follow` connects two `Users` (follower and followed).
 
-**How Relationships Aid Implementation:**
+### How Relationships Aid Implementation:**
 
 * **Data integrity:** Relationships ensure data consistency and prevent inconsistencies. For example, a `Comment` must always belong to a `User` and a `Post`.
 * **Efficient querying:** Relationships allow for efficient querying of related data. For example, to get all comments on a post, we can use the `post.comments` relationship.
 * **Cascade operations:** Relationships can be used to cascade operations. For example, if a `User` is deleted, their associated `Posts`, `Comments`, and `Likes` can be automatically deleted.
 
-## R8: API Endpoints
+## API Endpoints
+
+## Expanded API Endpoints
 
 ### **Users**
 
-* **GET /users** - Get a list of all users.
-* **GET /users/<user_id>** - Get a specific user.
-* **POST /users** - Create a new user.
-* **PUT /users/<user_id>** - Update a user.
-* **DELETE /users/<user_id>** - Delete a user.
+* **GET /users**
+    * **HTTP Method:** GET
+    * **Request Parameters:**
+      * `page` (optional): Page number for pagination
+      * `per_page` (optional): Number of users per page
+    * **Authorisation**: JWT token required in the `Auth` header.
+    * **Response Format:** JSON array of user objects (id, username, email, profile_picture, bio)
+    * **Example Request:**
+        ```
+        curl -H "Authorization: Bearer <your_token>" http://localhost:5000/users
+        ```
+    * **Example Response:**
+        ```json
+        [
+            {"id": 1, "username": "user1", "email": "user1@example.com", "profile_picture": "https://example.com/profile1.jpg", "bio": "This is user 1."},
+            {"id": 2, "username": "user2", "email": "user2@example.com", "profile_picture": "https://example.com/profile2.jpg", "bio": "This is user 2."}
+        ]
+        ```
+
+* **GET /users/<user_id>**
+    * **HTTP Method:** GET
+    * **Request Parameters:**
+        - `user_id`: ID of the user to retrieve
+    - **Authorisation:** JWT token required in the `Authorisation` header
+    * **Response Format:** JSON object representing the user
+    * **Example Request:**
+        ```
+        curl -H "Authorization: Bearer <your_token>" http://localhost:5000/users/1
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "id": 1,
+            "username": "user1",
+            "email": "user1@example.com",
+            "profile_picture": "https://example.com/profile1.jpg",
+            "bio": "This is user 1."
+        }
+        ```
+
+* **POST /users**
+    * **HTTP Method:** POST
+    * **Request Parameters:**
+        - `username`
+        - `email`
+        - `password`
+    * **Response Format:** JSON object representing the newly created user
+    * **Example Request:**
+        ```
+        curl -X POST http://localhost:5000/users -d '{"username": "newuser", "email": "newuser@example.com", "password": "password123"}'
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "id": 3,
+            "username": "newuser",
+            "email": "newuser@example.com",
+            "profile_picture": null,
+            "bio": null
+        }
+        ```
+
+* **PUT /users/<user_id>**
+    * **HTTP Method:** PUT
+    * **Request Parameters:**
+        - `user_id`: ID of the user to update
+        - `username` (optional)
+        - `email` (optional)
+        - `profile_picture` (optional)
+        - `bio` (optional)
+    * **Response Format:** JSON object representing the updated user
+    * **Example Request:**
+        ```
+        curl -X PUT http://localhost:5000/users/1 -d '{"username": "updateduser"}'
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "id": 1,
+            "username": "updateduser",
+            "email": "user1@example.com",
+            "profile_picture": "https://example.com/profile1.jpg",
+            "bio": "This is user 1."
+        }
+        ```
+
+* **DELETE /users/<user_id>**
+    * **HTTP Method:** DELETE
+    * **Request Parameters:**
+        - `user_id`: ID of the user to delete
+    * **Response Format:** No response body
+    * **Example Request:**
+        ```
+        curl -X DELETE http://localhost:5000/users/1
+        ```
 
 ### **Posts**
 
-* **GET /posts** - Get a list of all posts.
-* **GET /posts/<post_id>** - Get a specific post.
-* **POST /posts** - Create a new post.
-* **PUT /posts/<post_id>** - Update a post.
-* **DELETE /posts/<post_id>** - Delete a post.
+* **GET /posts**
+    * **HTTP Method:** GET
+    * **Request Parameters:**
+        - `page` (optional): Page number for pagination
+        - `per_page` (optional): Number of posts per page
+    * **Response Format:** JSON array of post objects (id, user_id, content, created_at, updated_at, likes_count, comments_count)
+    * **Example Request:**
+        ```
+        curl http://localhost:5000/posts
+        ```
+    * **Example Response:**
+        ```json
+        [
+            {"id": 1, "user_id": 1, "content": "This is a post.", "created_at": "2023-12-31T23:59:59Z", "updated_at": "2023-12-31T23:59:59Z", "likes_count": 0, "comments_count": 0},
+            {"id": 2, "user_id": 2, "content": "Another post.", "created_at": "2023-12-31T23:59:58Z", "updated_at": "2023-12-31T23:59:58Z", "likes_count": 1, "comments_count": 2}
+        ]
+        ```
+
+* **GET /posts/<post_id>**
+    * **HTTP Method:** GET
+    * **Request Parameters:**
+        - `post_id`: ID of the post to retrieve
+    * **Response Format:** JSON object representing the post
+    * **Example Request:**
+        ```
+        curl http://localhost:5000/posts/1
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "id": 1,
+            "user_id": 1,
+            "content": "This is a post.",
+            "created_at": "2023-12-31T23:59:59Z",
+            "updated_at": "2023-12-31T23:59:59Z",
+            "likes_count": 0,
+            "comments_count": 0
+        }
+        ```
+
+* **POST /posts**
+    * **HTTP Method:** POST
+    * **Request Parameters:**
+        - `content`
+    * **Response Format:** JSON object representing the newly created post
+    * **Example Request:**
+        ```
+        curl -X POST http://localhost:5000/posts -d '{"content": "This is a new post."}'
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "id": 3,
+            "user_id": 1,
+            "content": "This is a new post.",
+            "created_at": "2024-01-01T00:00:00Z",
+            "updated_at": "2024-01-01T00:00:00Z",
+            "likes_count": 0,
+            "comments_count": 0
+        }
+        ```
+
+* **PUT /posts/<post_id>**
+    * **HTTP Method:** PUT
+    * **Request Parameters:**
+        - `post_id`: ID of the post to update
+        - `content` (optional)
+    * **Response Format:** JSON object representing the updated post
+    * **Example Request:**
+        ```
+        curl -X PUT http://localhost:5000/posts/1 -d '{"content": "Updated post content."}'
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "id": 1,
+            "user_id": 1,
+            "content": "Updated post content.",
+            "created_at": "2023-12-31T23:59:59Z",
+            "updated_at": "2024-01-01T00:00:00Z",
+            "likes_count": 0,
+            "comments_count": 0
+        }
+        ```
+
+* **DELETE /posts/<post_id>**
+    * **HTTP Method:** DELETE
+    * **Request Parameters:**
+        - `post_id`: ID of the post to delete
+    * **Response Format:** No response body
+    * **Example Request:**
+        ```
+        curl -X DELETE http://localhost:5000/posts/1
+        ```
 
 ### **Comments**
 
-* **GET /posts/<post_id>/comments** - Get comments for a specific post.
-* **POST /posts/<post_id>/comments** - Create a new comment on a post.
-* **PUT /comments/<comment_id>** - Update a comment.
-* **DELETE /comments/<comment_id>** - Delete a comment.
+* **GET /posts/<post_id>/comments**
+    * **HTTP Method:** GET
+    * **Request Parameters:**
+        - `post_id`: ID of the post to get comments for
+        - `page` (optional): Page number for pagination
+        - `per_page` (optional): Number of comments per page
+    * **Response Format:** JSON array of comment objects (id, user_id, post_id, content, created_at, updated_at)
+    * **Example Request:**
+        ```
+        curl http://localhost:5000/posts/1/comments
+        ```
+    * **Example Response:**
+        ```json
+        [
+            {"id": 1, "user_id": 2, "post_id": 1, "content": "Great post!", "created_at": "2024-01-01T00:01:00Z", "updated_at": "2024-01-01T00:01:00Z"},
+            {"id": 2, "user_id": 3, "post_id": 1, "content": "I agree.", "created_at": "2024-01-01T00:02:00Z", "updated_at": "2024-01-01T00:02:00Z"}
+        ]
+        ```
+
+* **POST /posts/<post_id>/comments**
+    * **HTTP Method:** POST
+    * **Request Parameters:**
+        - `post_id`: ID of the post to comment on
+        - `content`
+    * **Response Format:** JSON object representing the newly created comment
+    * **Example Request:**
+        ```
+        curl -X POST http://localhost:5000/posts/1/comments -d '{"content": "This is a comment."}'
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "id": 3,
+            "user_id": 1,
+            "post_id": 1,
+            "content": "This is a comment.",
+            "created_at": "2024-01-01T00:03:00Z",
+            "updated_at": "2024-01-01T00:03:00Z"
+        }
+        ```
+
+* **PUT /comments/<comment_id>**
+    * **HTTP Method:** PUT
+    * **Request Parameters:**
+        - `comment_id`: ID of the comment to update
+        - `content` (optional)
+    * **Response Format:** JSON object representing the updated comment
+    * **Example Request:**
+        ```
+        curl -X PUT http://localhost:5000/comments/1 -d '{"content": "Updated comment."}'
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "id": 1,
+            "user_id": 2,
+            "post_id": 1,
+            "content": "Updated comment.",
+            "created_at": "2024-01-01T00:01:00Z",
+            "updated_at": "2024-01-01T00:03:00Z"
+        }
+        ```
+
+* **DELETE /comments/<comment_id>**
+    * **HTTP Method:** DELETE
+    * **Request Parameters:**
+        - `comment_id`: ID of the comment to delete
+    * **Response Format:** No response body
+    * **Example Request:**
+        ```
+        curl -X DELETE http://localhost:5000/comments/1
+        ```
 
 ### **Likes**
 
-* **POST /posts/<post_id>/likes** - Like a post.
-* **DELETE /posts/<post_id>/likes** - Unlike a post.
+* **POST /posts/<post_id>/likes**
+    * **HTTP Method:** POST
+    * **Request Parameters:**
+        - `post_id`: ID of the post to like
+    * **Response Format:** No response body
+    * **Example Request:**
+        ```
+        curl -X POST http://localhost:5000/posts/1/likes
+        ```
+
+* **DELETE /posts/<post_id>/likes**
+    * **HTTP Method:** DELETE
+    * **Request Parameters:**
+        - `post_id`: ID of the post to unlike
+    * **Response Format:** No response body
+    * **Example Request:**
+        ```
+        curl -X DELETE http://localhost:5000/posts/1/likes
+        ```
 
 ### **Follows**
 
-* **POST /users/<user_id>/follow** - Follow a user.
-* **DELETE /users/<user_id>/follow** - Unfollow a user.
+* **POST /users/<user_id>/follow**
+    * **HTTP Method:** POST
+    * **Request Parameters:**
+        - `user_id`: ID of the user to follow
+    * **Response Format:** No response body
+    * **Example Request:**
+        ```
+        curl -X POST http://localhost:5000/users/2/follow
+        ```
+
+* **DELETE /users/<user_id>/follow**
+    * **HTTP Method:** DELETE
+    * **Request Parameters:**
+        - `user_id`: ID of the user to unfollow
+    * **Response Format:** No response body
+    * **Example Request:**
+        ```
+        curl -X DELETE http://localhost:5000/users/2/follow
+        ```
+
+### **Search**
+
+* **GET /search**
+    * **HTTP Method:** GET
+    * **Request Parameters:**
+        - `query`: Search query
+    * **Response Format:** JSON object with search results for users, posts, and comments
+    * **Example Request:**
+        ```
+        curl http://localhost:5000/search?query=user1
+        ```
+    * **Example Response:**
+        ```json
+        {
+            "users": [
+                {"id": 1, "username": "user1", "email": "user1@example.com", "profile_picture": "https://example.com/profile1.jpg", "bio": "This is user 1."}
+            ],
+            "posts": [
+                {"id": 1, "user_id": 1, "content": "This is a post about user1.", "created_at": "2023-12-31T23:59:59Z", "updated_at": "2023-12-31T23:59:59Z", "likes_count": 0, "comments_count": 0}
+            ],
+            "comments": []
+        }
+        ```
+
+### **Notifications**
+
+* **GET /users/<user_id>/notifications**
+    * **HTTP Method:** GET
+    * **Request Parameters:**
+        - `user_id`: ID of the user to get notifications for
+        - `page` (optional): Page number for pagination
+        - `per_page` (optional): Number of notifications per page
+    * **Response Format:** JSON array of notification objects (id, type, message, created_at)
+    * **Example Request:**
+        ```
+        curl http://localhost:5000/users/1/notifications
+        ```
+    * **Example Response:**
+        ```json
+        [
+            {"id": 1, "type": "post_like", "message": "User2 liked your post.", "created_at": "2024-01-01T00:04:00Z"},
+            {"id": 2, "type": "comment", "message": "User3 commented on your post.", "created_at": "2024-01-01T00:05:00Z"}
+        ]
+        ```
+
+* **POST /notifications/<notification_id>/mark-read**
+    * **HTTP Method:** POST
+    * **Request Parameters:**
+        - `notification_id`: ID of the notification to mark as read
+    * **Response Format:** No response body
+    * **Example Request:**
+        ```
+        curl -X POST http://localhost:5000/notifications/1/mark-read
+        ```
+
+**Remember to replace `http://localhost:5000` with the actual URL of your API.**
+
 
 ## Prerequisites
 
 * Python 3.6 or later
 * PostgreSQL database
 * `pip` package manager
+* Virtual Environment
 
 ## Installation
 
