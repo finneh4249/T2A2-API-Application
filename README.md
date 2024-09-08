@@ -53,6 +53,7 @@
 
 The ERD illustrates the relationships between entities in the database
 
+## Implemented Models and Relationships
 
 ### Models:
 
@@ -70,13 +71,14 @@ The ERD illustrates the relationships between entities in the database
 * A `Like` belongs to a `User` and a `Post`.
 * A `Follow` connects two `Users` (follower and followed).
 
-### How Relationships Aid Implementation:
+### How Relationships Aid Implementation:**
 
 * **Data integrity:** Relationships ensure data consistency and prevent inconsistencies. For example, a `Comment` must always belong to a `User` and a `Post`.
 * **Efficient querying:** Relationships allow for efficient querying of related data. For example, to get all comments on a post, we can use the `post.comments` relationship.
 * **Cascade operations:** Relationships can be used to cascade operations. For example, if a `User` is deleted, their associated `Posts`, `Comments`, and `Likes` can be automatically deleted.
 
 ## API Endpoints
+
 
 ### **Users**
 
@@ -538,6 +540,7 @@ The ERD illustrates the relationships between entities in the database
 * Python 3.6 or later
 * PostgreSQL database
 * `pip` package manager
+* Virtual Environment
 
 ## Installation
 
