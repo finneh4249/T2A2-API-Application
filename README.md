@@ -618,6 +618,79 @@ The ERD illustrates the relationships between entities in the database
 * **Rate limiting:** To prevent abuse, rate limiting is implemented.
 
 
+## Prerequisites
+
+* Python 3.6 or later
+* PostgreSQL database
+* `pip` package manager
+
+## Installation
+
+1. **Install PostgreSQL:**
+   * **Windows:** Download and install PostgreSQL from [https://www.postgresql.org/download/](https://www.postgresql.org/download/). Follow the installation instructions.
+   * **macOS:** Use Homebrew to install PostgreSQL:
+     ```bash
+     brew install postgresql
+     ```
+   * **Linux:** Consult your distribution's package manager for installation instructions.
+
+2. **Create a PostgreSQL user and database:**
+   * Open the PostgreSQL command-line interface (psql).
+   * Create a new user:
+     ```sql
+     CREATE USER your_username WITH PASSWORD 'your_password';
+     ```
+   * Create a new database:
+     ```sql
+     CREATE DATABASE social_media_api;
+     ```
+   * Grant privileges to the user:
+     ```sql
+     GRANT ALL PRIVILEGES ON DATABASE social_media_api TO your_username;
+     ```
+
+3. **Clone the repository:**
+   ```bash
+   git clone https://github.com/finneh4249/t2a2-api-application.git
+   ```
+
+4. **Create a virtual environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\bin\activate.ps1
+   ```
+
+5. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+6. **Configure database settings:**
+   Update the `.env.example` file with your database connection details, including the username, password, database name, and host.
+   Rename the `.env.example` file to `.env`.
+
+7. **Create the database:**
+   Run `flask db create`, then `flask db seed` to create and seed the database with default values.
+
+**Usage:**
+
+1. **Run the application:**
+   ```bash
+   flask run
+   ```
+
+2. **Access API endpoints:**
+   Use your preferred HTTP client (e.g., Postman, curl) to interact with the API endpoints.
+
+
+## Additional Information
+
+* **Authentication:** Use token-based authentication for user authorisation.
+* **Error handling:** The API returns appropriate HTTP status codes and error messages.
+* **Pagination:** For large result sets, pagination is supported.
+* **Rate limiting:** To prevent abuse, rate limiting is implemented.
+
+
 ## Design Requirements
 
 The web server must:
