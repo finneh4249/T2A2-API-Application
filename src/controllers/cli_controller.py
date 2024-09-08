@@ -1,9 +1,16 @@
+"""
+This module contains the CLI controller for the Flask application.
+
+The CLI controller contains functions that are decorated with the
+@cli_controller.cli.command() decorator. These functions are used to
+create database tables and users.
+
+"""
+
 from flask import Blueprint
 
 from init import db
 from models.user import User
-
-
 
 
 cli_controller = Blueprint('cli', __name__)
@@ -48,4 +55,3 @@ def drop_tables():
     Drops all tables in the database.
     """
     db.drop_all()
-    
