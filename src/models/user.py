@@ -39,8 +39,8 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
-    profile_picture = db.Column(db.String(), nullable=False)
-    bio = db.Column(db.String(500))
+    profile_picture = db.Column(db.String(), nullable=True)
+    bio = db.Column(db.String(500), nullable=True)
 
 class UserSchema(ma.Schema):
     """
@@ -74,11 +74,6 @@ class UserSchema(ma.Schema):
 
         fields = ('id', 'username', 'email', 'password_hash', 'profile_picture', 'bio')
 
-    username = fields.String(required=True, validate=Regexp(r'^[a-zA-Z0-9_]+$'))
-    email = fields.Email(required=True)
-    password_hash = fields.String(required=True)
-    profile_picture = fields.String()
-    bio = fields.String()
 
-user_schema = UserSchema(exclude=('password_hash'))
-users_schema = UserSchema(many=True, exclude=('password_hash'))
+user_schema = UserSchema(exclude=['password_hash'])
+users_schema = UserSchema(many=True, exclude=['password_hash'])
