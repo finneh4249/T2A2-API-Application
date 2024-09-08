@@ -514,7 +514,16 @@ These relationships help ensure data integrity and consistency in the database.
    Rename the `.env.example` file to `.env`.
 
 7. **Create the database:**
-   Run `flask db create`, then `flask db seed` to create and seed the database with default values.
+  
+   Run 
+   ```bash
+   flask db create
+   ```
+   then
+  ```bash
+  flask db seed
+  ```
+  to create and seed the database with default values.
 
 **Usage:**
 
@@ -524,7 +533,7 @@ These relationships help ensure data integrity and consistency in the database.
    ```
 
 2. **Access API endpoints:**
-   Use your preferred HTTP client (e.g., Postman, curl) to interact with the API endpoints.
+   Use your preferred HTTP client (e.g., Postman, curl, Insomnia, etc) to interact with the API endpoints.
 
 
 ## Additional Information
