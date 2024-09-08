@@ -623,6 +623,7 @@ The ERD illustrates the relationships between entities in the database
 * Python 3.6 or later
 * PostgreSQL database
 * `pip` package manager
+* Virtual Environment
 
 ## Installation
 
