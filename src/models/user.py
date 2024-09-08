@@ -63,6 +63,15 @@ class UserSchema(ma.Schema):
     """
 
     class Meta:
+        """
+        Configuration for the UserSchema.
+
+        Attributes
+        ----------
+        fields : tuple
+            The fields to include in the serialized representation of the User.
+        """
+
         fields = ('id', 'username', 'email', 'password_hash', 'profile_picture', 'bio')
 
     username = fields.String(required=True, validate=Regexp(r'^[a-zA-Z0-9_]+$'))
