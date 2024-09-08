@@ -549,6 +549,7 @@ These relationships help ensure data integrity and consistency in the database.
 * Python 3.6 or later
 * PostgreSQL database
 * `pip` package manager
+* Virtual Environment
 
 ## Installation
 
