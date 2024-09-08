@@ -25,21 +25,21 @@
 
 ## Database System Benefits and Drawbacks
 
-**Benefits of PostgreSQL:**
+### Benefits of PostgreSQL:
 
 * **Open-source:** Free to use and distribute.
 * **Robust:** Reliable and scalable for handling large datasets.
 * **Rich features:** Supports advanced features like full-text search, JSONB data type, and spatial data.
 * **Active community:** Strong community support and resources available.
 
-**Drawbacks of PostgreSQL:**
+### Drawbacks of PostgreSQL:
 
 * **Learning curve:** Can be more complex to learn and configure compared to simpler databases.
 * **Performance:** May require optimisation for very large datasets or high-traffic applications.
 
 ## R5: ORM Features and Functionalities
 
-**SQLAlchemy:**
+### SQLAlchemy:
 
 * **Object-relational mapping:** Maps Python classes to database tables.
 * **Querying:** Provides a high-level API for querying the database using Python syntax.
@@ -63,7 +63,7 @@ These relationships help ensure data integrity and consistency in the database.
 
 ## R7: Implemented Models and Relationships
 
-**Models:**
+### Models:
 
 * **User:** `id`, `username`, `email`, `password_hash`
 * **Post:** `id`, `user_id`, `content`, `created_at`, `updated_at`
@@ -71,7 +71,7 @@ These relationships help ensure data integrity and consistency in the database.
 * **Like:** `id`, `user_id`, `post_id`, `created_at`
 * **Follow:** `id`, `follower_id`, `followed_id`
 
-**Relationships:**
+###Relationships: 
 
 * A `User` has many `Posts`, `Comments`, and `Likes`.
 * A `Post` belongs to a `User` and can have many `Comments` and `Likes`.
