@@ -492,6 +492,15 @@ These relationships help ensure data integrity and consistency in the database.
      ```sql
      GRANT ALL PRIVILEGES ON DATABASE social_media_api TO your_username;
      ```
+    * Connect to the database:
+    ```sql
+        \connect social_media_api
+    ```
+    * Grant privileges to the user with the public schema:
+    ```sql
+    GRANT USAGE ON SCHEMA public TO your_username;
+    ```
+
 
 3. **Clone the repository:**
    ```bash
