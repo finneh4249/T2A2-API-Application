@@ -542,7 +542,48 @@ The ERD illustrates the relationships between entities in the database
 * **Pagination:** For large result sets, pagination is supported.
 * **Rate limiting:** To prevent abuse, rate limiting is implemented.
 
+## Project Planning
 
+This project utilised GitHub Projects to manage the project.
+Between September 8th and 15th, the project was created, and initial planning was completed. 
+
+- [GitHub Projects](https://github.com/finneh4249/t2a2-api-application/projects/1)
+
+![timeline](./docs/planning/timeline.png)
+![main_board](./docs/planning/main_board.png)
+
+### Milestones
+
+![milestone1](./docs/planning/milestone1.png)
+![milstones](./docs/planning/milestones.png)
+
+### Milestone 1: Planning
+![issue_2](./docs/planning/issue_2.png)
+
+### Milestone 2: User Management
+![issue_3](./docs/planning/issue_3.png)
+
+
+### Milestone 3: Post Management
+![issue_4](./docs/planning/issue_4.png)
+![issue_12](./docs/planning/issue_12.png)
+
+### Milestone 4: Comments and Notifications
+![issue_5](./docs/planning/issue_5.png)
+![issue_6](./docs/planning/issue_6.png)
+
+### Milestone 5: Following and Friends
+![issue_7](./docs/planning/issue_7.png)
+
+### Milestone 6: Search and Analytics
+![issue_8](./docs/planning/issue_8.png)
+![issue_9](./docs/planning/issue_9.png)
+
+### Milestone 7: Testing and Deployment
+![issue_10](./docs/planning/issue_10.png)
+![issue_10_2](./docs/planning/issue_10_2.png)
+![issue_11](./docs/planning/issue_11.png)
+![issue_13](./docs/planning/issue_13.png)
 ## Design Requirements
 
 The web server must:
