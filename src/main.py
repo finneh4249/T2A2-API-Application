@@ -8,6 +8,8 @@ import os
 from flask import Flask
 
 from init import db, ma, bcrypt, jwt
+from controllers.cli_controller import cli_controller
+from controllers.user_controller import user_controller
 
 
 def create_app():
@@ -28,4 +30,8 @@ def create_app():
     ma.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+    app.register_blueprint(cli_controller)
+    app.register_blueprint(user_controller)
+
+
     return app
