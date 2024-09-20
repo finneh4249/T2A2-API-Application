@@ -12,7 +12,7 @@ The endpoints are:
 """
 
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, create_refresh_token
 
 from init import db, bcrypt
 from models.user import User, user_schema, users_schema, profile_schema, UserSchema
@@ -80,7 +80,7 @@ def login():
 
     user = User.query.filter_by(username=username).first()
     if user and bcrypt.check_password_hash(password.encode('utf-8'), user.password_hash):
-        create_access_token = jwt.create_access_token(identity=user.id)
+        token = create_access_token(identity=user.id)
         return profile_schema.jsonify(user), create_access_token
     return 'Wrong username or password', 401
 
@@ -101,4 +101,4 @@ def get_user(user_id):
         The user with the specified ID.
     """
     user = User.query.get(user_id)
-    return user_schema.jsonify(user)
+    return profile_schema.jsonify(user)
