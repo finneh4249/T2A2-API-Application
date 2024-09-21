@@ -12,11 +12,10 @@ from datetime import datetime
 
 from init import db, bcrypt
 from models.user import User
+from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
 
 
 cli_controller = Blueprint('cli', __name__)
-
-   
 
 
 @cli_controller.cli.command("create_user")
@@ -32,9 +31,11 @@ def create_user(username, email, password, admin):
     password, and admin status.
     """
     hash_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    user = User(username=username, email=email, password_hash=hash_password, is_admin=admin, is_confirmed=True, confirmed_on=datetime.now())
+    user = User(username=username, email=email, password_hash=hash_password,
+                is_admin=admin, is_confirmed=True, confirmed_on=datetime.now())
     db.session.add(user)
     db.session.commit()
+
 
 @cli_controller.cli.command("db_create")
 def create_tables():
@@ -44,8 +45,10 @@ def create_tables():
     db.create_all()
     print("Tables created successfully.\n")
     users = [
-        User(username="admin", email="admin@localhost", password_hash=bcrypt.generate_password_hash("admin").decode('utf-8'), is_admin=True, is_confirmed=True, confirmed_on=datetime.now()),
-        User(username="user", email="user@localhost", password_hash=bcrypt.generate_password_hash("user").decode('utf-8'), is_admin=False, is_confirmed=True, confirmed_on=datetime.now())
+        User(username="admin", email="admin@localhost", password_hash=bcrypt.generate_password_hash(
+            "admin").decode('utf-8'), is_admin=True, is_confirmed=True, confirmed_on=datetime.now()),
+        User(username="user", email="user@localhost", password_hash=bcrypt.generate_password_hash(
+            "user").decode('utf-8'), is_admin=False, is_confirmed=True, confirmed_on=datetime.now())
     ]
     db.session.add_all(users)
     db.session.commit()
@@ -59,6 +62,7 @@ def drop_tables():
     """
     db.drop_all()
     print("Tables dropped successfully.")
+
 
 @cli_controller.cli.command("db_reset")
 def reset_tables():

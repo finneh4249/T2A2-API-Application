@@ -47,6 +47,7 @@ class User(db.Model):
     is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
 
+
 class UserSchema(ma.Schema):
     """
     Schema for serializing and deserializing User objects.
@@ -76,87 +77,19 @@ class UserSchema(ma.Schema):
         fields : tuple
             The fields to include in the serialized representation of the User.
         """
+        email = fields.String(required=True, validate=Regexp(
+            r"^\S+@\S+\.S+$", error="Invalid email format"))
+        password_hash = fields.String(required=True, validate=Regexp(
+            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", error="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"))
+        username = fields.String(required=True, validate=And(Length(min=4, max=100, error="Username must be between 4 and 100 characters"), Regexp(
+            r"^[a-zA-Z0-9 ]+$", error="Username must contain only alphanumeric characters")))
 
-        fields = ('id', 'username', 'email', 'password_hash', 'profile_picture', 'bio', 'is_admin', 'is_confirmed', 'confirmed_on')
-
-    @validates('username')
-    def validate_username(self, username):
-        """
-        Validates that the username is unique.
-
-        Parameters
-        ----------
-        username : str
-            The username to validate.
-
-        Returns
-        -------
-        str
-            The validated username.
-
-        Raises
-        ------
-        ValidationError
-            If the username is not unique.
-        """
-        user = User.query.filter_by(username=username).first()
-        if user:
-            raise ValidationError('Username already exists.')
-        return username
-    @validates('email')
-    def validate_email(self, email):
-         # TODO: Add format validation for email
-        """
-        Validates that the email is unique.
-
-        Parameters
-        ----------
-        email : str
-            The email to validate.
-
-        Returns
-        -------
-        str
-            The validated email.
-
-        Raises
-        ------
-        ValidationError
-            If the email is not unique.
-        """
-        user = User.query.filter_by(email=email).first()
-        if user:
-            raise ValidationError('Email already exists.')
-        return email
-
-    @validates('password_hash')
-    def validate_password(self, password):
-        # TODO: Add security validation for password, i.e. at least 8 characters, one uppercase letter, one number, one special character
-        """
-        Validates that the password is at least 8 characters long.
-
-        Parameters
-        ----------
-        password : str
-            The password to validate.
-
-        Returns
-        -------
-        str
-            The validated password.
-
-        Raises
-        ------
-        ValidationError
-            If the password is less than 8 characters long.
-        """
-        if len(password) < 8:
-            raise ValidationError('Password must be at least 8 characters long.')
-        return password
-       
+        fields = ('id', 'username', 'email', 'password_hash', 'profile_picture',
+                  'bio', 'is_admin', 'is_confirmed', 'confirmed_on')
 
 
 profile_schema = UserSchema(exclude=['password_hash'])
-user_schema = UserSchema(exclude=['password_hash', 'email', 'is_admin', 'is_confirmed', 'confirmed_on'])
-users_schema = UserSchema(many=True, exclude=['password_hash', 'email', 'is_admin', 'is_confirmed', 'confirmed_on'])
-
+user_schema = UserSchema(
+    exclude=['password_hash', 'email', 'is_admin', 'is_confirmed', 'confirmed_on'])
+users_schema = UserSchema(many=True, exclude=[
+                          'password_hash', 'email', 'is_admin', 'is_confirmed', 'confirmed_on'])
