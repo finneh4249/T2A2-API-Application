@@ -7,6 +7,8 @@ import os
 
 from flask import Flask
 
+def create_app():
+
 from init import db, ma, bcrypt, jwt, mail
 from controllers import cli, auth, user
 
