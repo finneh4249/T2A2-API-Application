@@ -13,6 +13,8 @@ from datetime import datetime
 from init import db, bcrypt
 from models.user import User
 from models.post import Post
+from models.like import Like
+
 from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
 
 
@@ -60,6 +62,12 @@ def create_tables():
              author=users[1], created_at=datetime.now())
     ]
     db.session.add_all(posts)
+
+    likes = [
+        Like(user=users[0], post=posts[1]),
+        Like(user=users[1], post=posts[0])
+    ]
+    db.session.add_all(likes)
     db.session.commit()
     print("User data added successfully.",
     "\n\nDefault users:\nadmin:admin\nuser:user\n\n",
