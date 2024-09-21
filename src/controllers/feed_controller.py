@@ -15,17 +15,30 @@ def get_feed():
     """
     Gets a list of all posts in the database.
 
+    The posts are paginated and can be navigated using the following query
+    parameters:
+
+    - `page`: The page to retrieve. Defaults to 1.
+    - `per_page`: The number of posts to retrieve per page. Defaults to 10.
+
     Returns
     -------
     list of Post
         A list of all posts in the database.
     """
-    #TODO: Add Followed Users Posts First
-    # TODO: Pagination
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
 
-    posts = Post.query.all().order_by(Post.created_at.desc())
+    # Retrieve all posts from the database
+    posts = Post.query.order_by(Post.created_at.desc())
 
-    post_arr = posts_schema.jsonify(posts)
+    # Paginate the posts
+    paginated_posts = posts.paginate(page=page, per_page=per_page, error_out=False)
+
+    # Serialize the paginated posts
+    post_arr = posts_schema.jsonify(paginated_posts.items)
+
+    # Return the serialized posts
     return post_arr
 
 @feed_controller.route('/following', methods=['GET'])
