@@ -20,10 +20,24 @@ def get_feed():
     list of Post
         A list of all posts in the database.
     """
-    # TODO: Sort by created_at
+    #TODO: Add Followed Users Posts First
     # TODO: Pagination
 
     posts = Post.query.all().order_by(Post.created_at.desc())
-    
+
     post_arr = posts_schema.jsonify(posts)
     return post_arr
+
+@feed_controller.route('/following', methods=['GET'])
+@jwt_required()
+def get_following_feed():
+    """
+    Gets a list of all posts from users the current user is following.
+
+    Returns
+    -------
+    list of Post
+        A list of all posts from followed users.
+    """
+    pass
+
