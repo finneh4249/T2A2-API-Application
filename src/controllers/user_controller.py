@@ -17,7 +17,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from init import db, bcrypt
 
 from models.user import User, user_schema, users_schema, profile_schema, UserSchema
-
+from models.post import Post, posts_schema
 user_controller = Blueprint('user_controller', __name__, url_prefix='/users')
 
 
@@ -95,3 +95,29 @@ def update_user(user_id):
     profile = profile_schema.dump(user)
     message = f"User {user.username} updated successfully."
     return {"message": message, "user": profile}
+
+
+@user_controller.route('/profile/<user_id>/timeline', methods=['GET'])
+@jwt_required()
+def get_user_timeline(user_id):
+    """
+    Gets a user's timeline.
+
+    Parameters
+    ----------
+    user_id : int
+        The ID of the user whose timeline to get.
+
+    Returns
+    -------
+    list of Post
+        The user's timeline.
+    """
+    user = User.query.get(user_id)
+    if not user:
+        return 'User not found', 404
+
+    posts = Post.query.filter_by(author_id=user_id).order_by(
+        Post.created_at.desc()).all()
+    post_arr = posts_schema.dump(posts)
+    return post_arr
