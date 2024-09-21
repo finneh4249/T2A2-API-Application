@@ -35,55 +35,6 @@ def get_users():
     return user_arr
 
 
-@user_controller.route('/register', methods=['POST'])
-def create_user():
-    """
-    Creates a new user in the database.
-
-    Request body must contain the following JSON keys:
-
-    - `username`: The new user's username.
-    - `email`: The new user's email address.
-    - `password`: The new user's password.
-
-    Returns a JSON representation of the newly created user.
-    """
-    username = request.json['username']
-    email = request.json['email']
-    password = request.json['password']
-
-    hash_password = bcrypt.generate_password_hash(password.encode('utf-8'))
-
-
-    user = User(username=username, email=email, password_hash=hash_password)
-    db.session.add(user)
-    db.session.commit()
-    #TODO: Add a confirmation email to send to the users email
-
-    return user_schema.jsonify(user)
-
-
-@user_controller.route('/login', methods=['POST'])
-def login():
-    """
-    Logs in a user by checking their username and password.
-
-    Request body must contain the following JSON keys:
-
-    - `username`: The user's username.
-    - `password`: The user's password.
-
-    Returns a JSON representation of the logged-in user.
-    """
-    username = request.json['username']
-    password = request.json['password']
-
-    user = User.query.filter_by(username=username).first()
-    if user and bcrypt.check_password_hash(password.encode('utf-8'), user.password_hash):
-        token = create_access_token(identity=user.id)
-        return profile_schema.jsonify(user), create_access_token
-    return 'Wrong username or password', 401
-
 @user_controller.route('/profile/<user_id>', methods=['GET'])
 @jwt_required()
 def get_user(user_id):

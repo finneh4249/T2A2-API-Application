@@ -8,8 +8,7 @@ import os
 from flask import Flask
 
 from init import db, ma, bcrypt, jwt, mail
-from controllers.cli_controller import cli_controller
-from controllers.user_controller import user_controller
+from controllers import cli, auth, user
 
 
 def create_app():
@@ -32,9 +31,11 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
     mail.init_app(app)
-    app.register_blueprint(cli_controller)
-    app.register_blueprint(user_controller)
+    app.register_blueprint(cli)
+    app.register_blueprint(user)
+    app.register_blueprint(auth)
 
 
     return app
 
+app = create_app()
