@@ -4,8 +4,10 @@ from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from init import db
-from . import feed_controller
 from models.post import Post, post_schema, posts_schema
+
+feed_controller = Blueprint('feed_controller', __name__, url_prefix='/feed')
+
 
 @feed_controller.route('/', methods=['GET'])
 @jwt_required()

@@ -14,9 +14,11 @@ from init import db, bcrypt
 from models.user import User
 from models.post import Post
 from models.like import Like
-from . import cli_controller
 
 from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
+
+
+cli_controller = Blueprint('cli', __name__)
 
 
 @cli_controller.cli.command("create_user")
