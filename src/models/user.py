@@ -51,6 +51,11 @@ class User(db.Model):
     likes = db.relationship('Like', back_populates='user')
     comments = db.relationship('Comment', back_populates='user')
 
+    follows = db.relationship(
+        'Follow', foreign_keys='Follow.followed_id', back_populates='follows')
+    followers = db.relationship(
+        'Follow', foreign_keys='Follow.follower_id', back_populates='follower')
+
 
 class UserSchema(ma.Schema):
     """
@@ -71,9 +76,18 @@ class UserSchema(ma.Schema):
     bio : str
         User's bio.
     """
-    posts = fields.List(fields.Nested('PostSchema', exclude=['author']))
+    posts = fields.List(fields.Nested(
+        'PostSchema', exclude=['author', 'likes', 'comments']))
     likes = fields.List(fields.Nested('LikeSchema', exclude=['user_id']))
     comments = fields.List(fields.Nested('CommentSchema', exclude=['user_id']))
+    followers = fields.List(fields.Nested(
+        'FollowSchema', exclude=['followed_id']))
+    follows = fields.List(fields.Nested(
+        'FollowSchema', exclude=['follower_id']))
+
+    likes_count = fields.Method(serialize="get_likes_count")
+    followers_count = fields.Method(serialize="get_followers_count")
+    following_count = fields.Method(serialize="get_following_count")
 
     email = fields.String(required=True, validate=Regexp(
         r"^\S+@\S+\.S+$", error="Invalid email format"))
@@ -81,8 +95,6 @@ class UserSchema(ma.Schema):
         r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", error="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"))
     username = fields.String(required=True, validate=And(Length(min=4, max=100, error="Username must be between 4 and 100 characters"), Regexp(
         r"^[a-zA-Z0-9 ]+$", error="Username must contain only alphanumeric characters")))
-    
-
 
     class Meta:
 
@@ -95,12 +107,62 @@ class UserSchema(ma.Schema):
             The fields to include in the serialized representation of the User.
         """
 
-        fields = ('id', 'username', 'email', 'password_hash', 'profile_picture',
-                  'bio', 'is_admin', 'is_confirmed', 'confirmed_on', 'posts', 'likes', 'comments')
+        fields = ('id', 'username', 'email', 'password_hash', 
+                'profile_picture', 'bio', 
+                'likes_count', 'followers_count', 'following_count', 
+                'is_admin', 'is_confirmed', 'confirmed_on',
+                'posts', 'likes', 'comments', 
+                'followers', 'follows')
+
+
+    def get_likes_count(self, user, **kwargs):
+        """
+        Returns the number of likes a post has.
+    
+        Parameters
+        ----------
+        post : Post
+            The post to get the like count for.
+    
+        Returns
+        -------
+        int
+            The number of likes the post has.
+        """
+        return len(user.likes)
+
+    def get_followers_count(self, user, **kwargs):
+        """
+        Returns the number of likes a post has.
+    
+        Parameters
+        ----------
+        post : Post
+            The post to get the like count for.
+    
+        Returns
+        -------
+        int
+            The number of likes the post has.
+        """
+        return len(user.followers)
+    def get_following_count(self, user, **kwargs):
+        """
+        Returns the number of likes a post has.
+    
+        Parameters
+        ----------
+        post : Post
+            The post to get the like count for.
+    
+        Returns
+        -------
+        int
+            The number of likes the post has.
+        """
+        return len(user.follows)
 
 
 profile_schema = UserSchema(exclude=['password_hash'])
-user_schema = UserSchema(
-    exclude=['password_hash', 'email', 'is_admin', 'is_confirmed', 'confirmed_on', 'posts'])
-users_schema = UserSchema(many=True, exclude=[
-                          'password_hash', 'email', 'is_admin', 'is_confirmed', 'confirmed_on', 'posts'])
+user_schema = UserSchema(only=('id', 'username', 'email'))
+users_schema = UserSchema(many=True, only=('id', 'username', 'email'))
