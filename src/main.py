@@ -8,7 +8,7 @@ import os
 from flask import Flask
 
 from init import db, ma, bcrypt, jwt, mail
-from controllers import cli_controller, auth_controller, user_controller, post_controller, feed_controller
+from controllers import cli, auth, user, post, feed
 
 
 def create_app():
@@ -55,19 +55,18 @@ def create_app():
     mail.init_app(app)
 
     # Register the CLI blueprint
-    app.register_blueprint(cli_controller)
+    app.register_blueprint(cli)
 
     # Register the user blueprint
-    app.register_blueprint(user_controller)
+    app.register_blueprint(user)
 
     # Register the auth blueprint
-    app.register_blueprint(auth_controller)
+    app.register_blueprint(auth)
 
     # Register the post blueprint
-    app.register_blueprint(post_controller)
+    app.register_blueprint(post)
 
-    # Register the feed blueprint
-    app.register_blueprint(feed_controller)
+    app.register_blueprint(feed)
 
     # Return the configured Flask application
     return app
