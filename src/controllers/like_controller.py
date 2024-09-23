@@ -1,15 +1,12 @@
-from flask import Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from init import db
 from models.post import Post, post_schema
 from models.like import Like, likes_schema
-from models.user import User, user_schema
+from . import like_controller
 
 
-post_controller = Blueprint('post_controller', __name__, url_prefix='/<int:post_id>')
-
-@post_controller.route('/like', methods=['POST'])
+@like_controller.route('/like', methods=['POST'])
 @jwt_required()
 def like_post(post_id):
     """
@@ -48,7 +45,7 @@ def like_post(post_id):
 
     return message
 
-@post_controller.route('/like', methods=['DELETE'])
+@like_controller.route('/like', methods=['DELETE'])
 @jwt_required()
 def unlike_post(post_id):
     """
@@ -81,7 +78,7 @@ def unlike_post(post_id):
 
     return post_schema.dump(post)
 
-@post_controller.route('/likes', methods=['GET'])
+@like_controller.route('/likes', methods=['GET'])
 @jwt_required()
 def get_likes(post_id):
     """

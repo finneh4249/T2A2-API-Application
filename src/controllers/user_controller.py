@@ -11,15 +11,13 @@ The endpoints are:
 
 """
 
-from flask import Blueprint, request
+from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from init import db, bcrypt
-
+from . import user_controller
 from models.user import User, user_schema, users_schema, profile_schema, UserSchema
 from models.post import Post, posts_schema
-user_controller = Blueprint('user_controller', __name__, url_prefix='/users')
-
 
 @user_controller.route('/', methods=['GET'])
 # TODO: Add Authentication?
