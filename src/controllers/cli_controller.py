@@ -15,6 +15,7 @@ from models.user import User
 from models.post import Post
 from models.like import Like
 from models.comment import Comment
+from models.follow import Follow
 
 from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
 
@@ -77,6 +78,12 @@ def create_tables():
                 content="This is a comment on the first post.", created_at=datetime.now())
     ]
     db.session.add_all(comments)
+
+    follows = [
+        Follow(follower=users[0], follows=users[1]),
+        Follow(follower=users[1], follows=users[0])
+    ]
+    db.session.add_all(follows)
     db.session.commit()
     print("User data added successfully.",
           "\n\nDefault users:\nadmin:admin\nuser:user\n\n",
