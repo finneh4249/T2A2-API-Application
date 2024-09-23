@@ -14,6 +14,7 @@ from init import db, bcrypt
 from models.user import User
 from models.post import Post
 from models.like import Like
+from models.comment import Comment
 
 from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
 
@@ -68,12 +69,20 @@ def create_tables():
         Like(user=users[1], post=posts[0])
     ]
     db.session.add_all(likes)
+
+    comments = [
+        Comment(user=users[0], post=posts[1],
+                content="This is a comment on the second post.", created_at=datetime.now()),
+        Comment(user=users[1], post=posts[0],
+                content="This is a comment on the first post.", created_at=datetime.now())
+    ]
+    db.session.add_all(comments)
     db.session.commit()
     print("User data added successfully.",
-    "\n\nDefault users:\nadmin:admin\nuser:user\n\n",
-    "You can use these credentials to login.",
-    "\nYou can create new users using the 'create_user' command.",
-    "\nIf you encounter an error and need to reset the database, use the 'db_reset' command.")
+          "\n\nDefault users:\nadmin:admin\nuser:user\n\n",
+          "You can use these credentials to login.",
+          "\nYou can create new users using the 'create_user' command.",
+          "\nIf you encounter an error and need to reset the database, use the 'db_reset' command.")
 
 
 @cli_controller.cli.command("db_drop")
