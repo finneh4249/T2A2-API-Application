@@ -1,13 +1,14 @@
 
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from datetime import datetime
 
 from init import db
 from models.comment import Comment, comment_schema, comments_schema
 from models.post import Post
 
 comment_controller = Blueprint(
-    'comment_controller', __name__, url_prefix='/posts/<int:post_id>')
+    'comment_controller', __name__, url_prefix='/posts/<int:post_id>/comments')
 
 
 @comment_controller.route('/', methods=['GET'])
@@ -26,12 +27,18 @@ def get_comments(post_id):
     list of Comment
         A list of all comments on the post.
     """
-    post = Post.query.get(post_id)
-    if not post:
-        return {"message": "Post not found"}, 404
 
-    comments = post.comments
-    comment_arr = comments_schema.dump(comments)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+
+
+    comments = Comment.query.filter_by(post_id=post_id).order_by(Comment.created_at.desc())
+    if not comments:
+        return {"message": "No comments found"}, 404
+
+    paginated_comments = comments.paginate(page=page, per_page=per_page, error_out=False)
+
+    comment_arr = comments_schema.dump(paginated_comments.items)
     return {"message": "Comments retrieved successfully", "data": comment_arr}
 
 
