@@ -37,6 +37,7 @@ class Post(db.Model):
         db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     author = db.relationship('User', back_populates='posts')
+    comments = db.relationship('Comment', back_populates='post')
     likes = db.relationship('Like', back_populates='post')
 
 
@@ -64,6 +65,7 @@ class PostSchema(ma.Schema):
     content = fields.String(required=True, validate=Regexp(r'^.{1,500}$'))
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
+    comments = fields.List(fields.Nested('CommentSchema', exclude=['post_id']))
     likes = fields.List(fields.Nested('LikeSchema', exclude=['post_id']))
 
     likes_count = fields.Method(serialize="get_likes_count")
@@ -81,7 +83,7 @@ class PostSchema(ma.Schema):
             The fields to include in the serialized representation of the Post.
         """
 
-        fields = ('id', 'title', 'content', 'created_at', 'updated_at', 'author', 'likes', 'likes_count')
+        fields = ('id', 'title', 'content', 'created_at', 'updated_at', 'author', 'likes', 'likes_count', 'comments')
 
     def get_likes_count(self, post, **kwargs):
         """

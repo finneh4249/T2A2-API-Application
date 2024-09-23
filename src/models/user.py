@@ -49,6 +49,7 @@ class User(db.Model):
 
     posts = db.relationship('Post', back_populates='author')
     likes = db.relationship('Like', back_populates='user')
+    comments = db.relationship('Comment', back_populates='user')
 
 
 class UserSchema(ma.Schema):
@@ -71,6 +72,8 @@ class UserSchema(ma.Schema):
         User's bio.
     """
     posts = fields.List(fields.Nested('PostSchema', exclude=['author']))
+    likes = fields.List(fields.Nested('LikeSchema', exclude=['user_id']))
+    comments = fields.List(fields.Nested('CommentSchema', exclude=['user_id']))
 
     email = fields.String(required=True, validate=Regexp(
         r"^\S+@\S+\.S+$", error="Invalid email format"))
@@ -78,6 +81,8 @@ class UserSchema(ma.Schema):
         r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", error="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"))
     username = fields.String(required=True, validate=And(Length(min=4, max=100, error="Username must be between 4 and 100 characters"), Regexp(
         r"^[a-zA-Z0-9 ]+$", error="Username must contain only alphanumeric characters")))
+    
+
 
     class Meta:
 
@@ -91,7 +96,7 @@ class UserSchema(ma.Schema):
         """
 
         fields = ('id', 'username', 'email', 'password_hash', 'profile_picture',
-                  'bio', 'is_admin', 'is_confirmed', 'confirmed_on', 'posts')
+                  'bio', 'is_admin', 'is_confirmed', 'confirmed_on', 'posts', 'likes', 'comments')
 
 
 profile_schema = UserSchema(exclude=['password_hash'])
