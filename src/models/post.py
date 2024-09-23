@@ -37,6 +37,8 @@ class Post(db.Model):
         db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     author = db.relationship('User', back_populates='posts')
+    likes = db.relationship('Like', back_populates='post')
+
 
 class PostSchema(ma.Schema):
     """
@@ -56,11 +58,18 @@ class PostSchema(ma.Schema):
         ID of the user who created the post.
     """
 
-    id = fields.Integer(dump_only=True)
-    author = fields.Nested('UserSchema', only=('id', 'username'))
+    id = fields.Integer()
+    author = fields.Nested('UserSchema', only=['id', 'username'])
     title = fields.String(required=True, validate=Regexp(r'^.{1,80}$'))
     content = fields.String(required=True, validate=Regexp(r'^.{1,500}$'))
-    created_at = fields.DateTime(dump_only=True)
+    created_at = fields.DateTime()
+    updated_at = fields.DateTime()
+    likes = fields.List(fields.Nested('LikeSchema', exclude=['post_id']))
+
+    likes_count = fields.Method(serialize="get_likes_count")
+
+    # TODO: Add like count to the schema based on the number of likes a post has
+    # like_count = fields.Integer(dump_only=True)
 
     class Meta:
         """
@@ -72,8 +81,23 @@ class PostSchema(ma.Schema):
             The fields to include in the serialized representation of the Post.
         """
 
-        fields = ('id', 'title', 'content', 'created_at', 'author')
+        fields = ('id', 'title', 'content', 'created_at', 'updated_at', 'author', 'likes', 'likes_count')
 
-
+    def get_likes_count(self, post, **kwargs):
+        """
+        Returns the number of likes a post has.
+    
+        Parameters
+        ----------
+        post : Post
+            The post to get the like count for.
+    
+        Returns
+        -------
+        int
+            The number of likes the post has.
+        """
+        return len(post.likes)
 post_schema = PostSchema()
 posts_schema = PostSchema(many=True)
+
