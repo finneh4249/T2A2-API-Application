@@ -37,7 +37,7 @@ def get_users():
     return user_arr
 
 
-@user_controller.route('/profile/<user_id>', methods=['GET'])
+@user_controller.route('/<user_id>/profile', methods=['GET'])
 @jwt_required()
 def get_user(user_id):
     """
@@ -60,7 +60,7 @@ def get_user(user_id):
     return profile_schema.jsonify(user)
 
 
-@user_controller.route('/profile/<user_id>', methods=['PUT', 'PATCH'])
+@user_controller.route('/<user_id>/profile', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_user(user_id):
     """
@@ -97,7 +97,7 @@ def update_user(user_id):
     return {"message": message, "user": profile}
 
 
-@user_controller.route('/profile/<user_id>/timeline', methods=['GET'])
+@user_controller.route('/<user_id>/timeline', methods=['GET'])
 @jwt_required()
 def get_user_timeline(user_id):
     """
@@ -121,3 +121,4 @@ def get_user_timeline(user_id):
         Post.created_at.desc()).all()
     post_arr = posts_schema.dump(posts)
     return post_arr
+
