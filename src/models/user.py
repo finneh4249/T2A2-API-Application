@@ -48,6 +48,7 @@ class User(db.Model):
     confirmed_on = db.Column(db.DateTime, nullable=True)
 
     posts = db.relationship('Post', back_populates='author')
+    likes = db.relationship('Like', back_populates='user')
 
 
 class UserSchema(ma.Schema):
