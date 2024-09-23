@@ -151,7 +151,7 @@ def forgot_password():
     return {"message": "Password reset link created", "reset_url": reset_url}
 
 
-@auth_controller.route('/reset_password/<token>', methods=['PUT', 'PATCH'])
+@auth_controller.route('/reset_password/<token>', methods=['PUT', 'PATCH'], endpoint='reset_user_password')
 def reset_password(token):
     """
     Resets a user's password.
@@ -187,8 +187,7 @@ def reset_password(token):
     # Return the updated user
     return {"message": "Password reset successfully", "user": profile_schema.dump(user)}
 
-
-@auth_controller.route('/change_password', methods=['PUT', 'PATCH'])
+@auth_controller.route('/change_password', methods=['PUT', 'PATCH'], endpoint="change_user_password")
 @jwt_required
 def change_password():
     """
@@ -225,32 +224,3 @@ def change_password():
 
     # Return the updated user
     return {"message": "Password changed successfully", "user": profile_schema.dump(user)}
-
-
-@auth_controller.route('/promote/<int:user_id>', methods=['POST'])
-@jwt_required
-def promote_user(user_id):
-    """
-    Promotes a user to admin status.
-
-    The user making the request must be an admin.
-
-    Returns a JSON message indicating the status of the promotion.
-    """
-    # Get the user ID from the JWT
-    current_user_id = get_jwt_identity()
-
-    # Get the user from the database
-    user = User.query.get(user_id)
-
-    # Check that the current user is an admin
-    current_user = User.query.get(current_user_id)
-    if not current_user.is_admin:
-        return {"message": "Unauthorized"}, 401
-
-    # Promote the user to admin
-    user.is_admin = True
-    db.session.commit()
-
-    # Return the updated user
-    return {"message": "User promoted to admin", "user": profile_schema.dump(user)}

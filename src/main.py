@@ -7,10 +7,8 @@ import os
 
 from flask import Flask
 
-def create_app():
-
 from init import db, ma, bcrypt, jwt, mail
-from controllers import cli, auth, user
+from controllers import cli, auth, user, post, feed, comment, like
 
 
 def create_app():
@@ -64,6 +62,17 @@ def create_app():
 
     # Register the auth blueprint
     app.register_blueprint(auth)
+
+    # Register the post blueprint
+    app.register_blueprint(post)
+
+    app.register_blueprint(feed)
+
+    app.register_blueprint(comment)
+
+    app.register_blueprint(like)
+
+    # Set the app's secret key
 
     # Return the configured Flask application
     return app
