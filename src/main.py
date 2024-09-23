@@ -8,7 +8,7 @@ import os
 from flask import Flask
 
 from init import db, ma, bcrypt, jwt, mail
-from controllers import cli, auth, user, post, feed, comment, like
+from controllers import cli, auth, user, post, feed, comment, like, follow
 
 
 def create_app():
@@ -71,6 +71,8 @@ def create_app():
     app.register_blueprint(comment)
 
     app.register_blueprint(like)
+
+    app.register_blueprint(follow)
 
     # Set the app's secret key
 
