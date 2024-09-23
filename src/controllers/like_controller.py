@@ -7,7 +7,7 @@ from models.like import Like, likes_schema
 from models.user import User, user_schema
 
 
-post_controller = Blueprint('post_controller', __name__, url_prefix='/<int:post_id>')
+post_controller = Blueprint('post_controller', __name__, url_prefix='/posts/<int:post_id>')
 
 @post_controller.route('/like', methods=['POST'])
 @jwt_required()
