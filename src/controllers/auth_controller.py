@@ -124,8 +124,9 @@ def confirm(token):
     return {"message": "User confirmed successfully, you may now log in.", "user": profile_schema.dump(user)}
 
 
-@auth_controller.route('/forgot_password', methods=['GET'])
-@jwt_required
+#TODO: Check for bugs
+@auth_controller.route('/forgot_password', methods=['GET'], endpoint="forgot_user_password")
+@jwt_required()
 def forgot_password():
     """
     Sends a password reset email to the user.
@@ -137,10 +138,13 @@ def forgot_password():
     Returns a JSON message indicating the status of the password reset email.
     """
     # Get the user ID from the JWT
-    user_id = get_jwt_identity()
+    user_id = request.args.get('user_id', type=int)
 
     # Get the user from the database
     user = User.query.get(user_id)
+
+    if not user:
+        return {"message": "User not found"}, 404
 
     # Create a password reset token
     token = create_access_token(identity=user_id)
@@ -150,8 +154,8 @@ def forgot_password():
 
     return {"message": "Password reset link created", "reset_url": reset_url}
 
-
-@auth_controller.route('/reset_password/<token>', methods=['PUT', 'PATCH'], endpoint='reset_user_password')
+# TODO: Check for bugs
+@auth_controller.route('/reset_password/<token>', methods=['PUT', 'PATCH'], endpoint='reset_user_password_confirm')
 def reset_password(token):
     """
     Resets a user's password.
@@ -188,7 +192,7 @@ def reset_password(token):
     return {"message": "Password reset successfully", "user": profile_schema.dump(user)}
 
 @auth_controller.route('/change_password', methods=['PUT', 'PATCH'], endpoint="change_user_password")
-@jwt_required
+@jwt_required()
 def change_password():
     """
     Changes a user's password.
@@ -207,6 +211,9 @@ def change_password():
     # Get the old and new passwords from the request body
     old_password = request.json['old_password']
     new_password = request.json['new_password']
+
+    if old_password == new_password:
+        return {"message": "Password cannot be the same as previous password"}, 400
 
     # Get the user from the database
     user = User.query.get(user_id)
