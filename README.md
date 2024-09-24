@@ -559,6 +559,8 @@ The ERD illustrates the relationships between entities in the database
 This project utilised GitHub Projects to manage the project.
 Between September 8th and 15th, the project was created, and initial planning was completed. 
 
+While working on the project I realised that some features that I was initially planning to create would be far too complex and outside of the scope of the project, as such, I decided instead to focus more on other parts of the project to enhance their functionality.
+
 - [GitHub Projects](https://github.com/finneh4249/t2a2-api-application/projects/1)
 
 ![timeline](./docs/planning/timeline.png)
