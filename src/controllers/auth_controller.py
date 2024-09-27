@@ -116,6 +116,26 @@ def create_user():
     }
 
 #TODO: Add delete user endpoint
+@auth_controller.route('/unregister', methods=['DELETE'])
+@jwt_required()
+def delete_user():
+    """
+    Deletes a user from the database.
+
+    Returns a JSON message indicating the status of the deletion.
+    """
+    # Get the user ID from the JWT
+    user_id = get_jwt_identity()
+
+    # Get the user from the database
+    user = User.query.get(user_id)
+
+    # Delete the user from the database
+    db.session.delete(user)
+    db.session.commit()
+
+    # Return a JSON message indicating the status of the deletion
+    return {"message": "User deleted successfully"}
 
 @auth_controller.route('/confirm/<token>', methods=['POST'])
 def confirm(token):
