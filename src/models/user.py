@@ -46,6 +46,15 @@ class User(db.Model):
         The users the user is following.
     followers : list[Follow]
         The users that are following the user.
+
+    Notes
+    -----
+    The relationships are defined as follows:
+    - A user can make many posts.
+    - A user can make many likes.
+    - A user can make many comments.
+    - A user can follow many users.
+    - A user can be followed by many users.
     """
     __tablename__ = 'users'
 
@@ -150,7 +159,7 @@ class UserSchema(ma.Schema):
                 'followers', 'follows')
 
 
-    def get_likes_count(self, user: User, **kwargs) -> int:
+    def get_likes_count(self, user, **kwargs):
         """
         Returns the number of likes a user has.
 
@@ -169,7 +178,7 @@ class UserSchema(ma.Schema):
             The number of likes the user has.
         """
         # Get the number of likes the user has
-        return user.likes.count()
+        return len(user.likes) or 0
 
     def get_followers_count(self, user, **kwargs):
         """
@@ -186,7 +195,7 @@ class UserSchema(ma.Schema):
             The number of followers the user has.
         """
         # Get the number of followers the user has using a query
-        return Follow.query.filter_by(followed_id=user.id).count()
+        return len(user.followers) or 0
     def get_following_count(self, user, **kwargs):
         """
         Returns the number of users the given user is following.
@@ -202,7 +211,7 @@ class UserSchema(ma.Schema):
             The number of users the given user is following.
         """
         # Get the number of users the user is following
-        return Follow.query.filter_by(follower_id=user.id).count()
+        return len(user.follows) or 0
 
 
 profile_schema = UserSchema(exclude=['password_hash'])

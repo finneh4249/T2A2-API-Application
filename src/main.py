@@ -8,7 +8,7 @@ import os
 from flask import Flask
 from marshmallow import ValidationError
 
-from init import db, ma, bcrypt, jwt, mail
+from init import db, ma, bcrypt, jwt
 from controllers import cli, auth, user, post, feed, comment, like, follow
 
 
@@ -37,10 +37,6 @@ def create_app():
     # Load the JWT secret key from the environment
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
 
-    # Load the security password salt from the environment
-    app.config['SECURITY_PASSWORD_SALT'] = os.environ.get(
-        'SECURITY_PASSWORD_SALT')
-
     # Initialize the Flask-SQLAlchemy extension
     db.init_app(app)
 
@@ -52,9 +48,6 @@ def create_app():
 
     # Initialize the Flask-JWT-Extended extension
     jwt.init_app(app)
-
-    # Initialize the Flask-Mail extension
-    mail.init_app(app)
 
     # Register the CLI blueprint
     app.register_blueprint(cli)
@@ -96,13 +89,13 @@ def create_app():
             A 400 error response with a JSON body containing the error
             messages.
         """
-        return {"error": error.messages}, 400
+        return {"validation_error": error.messages}, 400
 
     @app.errorhandler(Exception)
-    def handle_sqlalchemy_error(error):
-        """Handle a SQLAlchemy error by returning a 500 error response.
+    def handle_generic_error(error):
+        """Handle a generic error by returning a 500 error response.
 
-        This function is an error handler for SQLAlchemy errors. It
+        This function is an error handler for generic uncaught errors. It
         takes an Exception object as an argument and returns a 500 error
         response with a JSON body containing the error message.
 
@@ -124,3 +117,4 @@ def create_app():
 
 
 app = create_app()
+

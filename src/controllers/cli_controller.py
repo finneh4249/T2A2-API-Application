@@ -1,11 +1,15 @@
 """
-This module contains the CLI controller for the Flask application.
+This module contains a Blueprint for the CLI commands.
 
-The CLI controller contains functions that are decorated with the
-@cli_controller.cli.command() decorator. These functions are used to
-create database tables and users.
+The commands are:
+
+- `db_create`: Create all tables in the database.
+- `db_drop`: Drop all tables in the database.
+- `create_user <username> <email> <password> <bio> [--admin]`: Create a user, use the --admin flag to create an admin user.
+- `delete_user <username>`: Delete the selected user from the database.
 
 """
+
 import click
 from flask import Blueprint
 from datetime import datetime
@@ -22,11 +26,11 @@ from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
 
 cli_controller = Blueprint('cli', __name__)
 
-
 @cli_controller.cli.command("create_user")
 @click.argument("username", default="user")
 @click.argument("email", default="user@localhost")
 @click.argument("password", default="user")
+@click.argument("bio", default="This is a user.")
 @click.option("--admin", is_flag=True)
 def create_user(username, email, password, admin):
     """
@@ -35,9 +39,12 @@ def create_user(username, email, password, admin):
     The user is created with the specified username, email address,
     password, and admin status.
     """
+    # Hash the password
     hash_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    user = User(username=username, email=email, password_hash=hash_password,
+    # Create a new user with the given information
+    user = User(username=username, email=email, password_hash=hash_password, bio=bio,
                 is_admin=admin, is_confirmed=True, confirmed_on=datetime.now())
+    # Add the new user to the database
     db.session.add(user)
     db.session.commit()
 
@@ -99,16 +106,6 @@ def drop_tables():
     """
     db.drop_all()
     print("Tables dropped successfully.")
-
-
-@cli_controller.cli.command("db_reset")
-def reset_tables():
-    """
-    Resets all tables in the database.
-    """
-    drop_tables()
-    create_tables()
-    print("Tables reset successfully.")
 
 
 @cli_controller.cli.command("delete_user")

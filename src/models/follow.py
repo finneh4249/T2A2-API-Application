@@ -1,3 +1,12 @@
+"""
+This module contains the Follow model and its associated schema.
+
+The Follow model represents a follow in the database. It contains
+attributes for the id, follower_id, and followed_id.
+
+The FollowSchema is a Marshmallow schema used to serialize and
+deserialize the Follow model.
+"""
 from init import db, ma
 from marshmallow import fields
 
@@ -13,6 +22,13 @@ class Follow(db.Model):
         ID of the user who is following another user.
     followed_id : int
         ID of the user who is being followed.
+
+    Relationships
+    -------------
+    follower : User
+        The user who is following another user.
+    follows : User
+        The user who is being followed.
     """
 
     __tablename__ = 'follows'

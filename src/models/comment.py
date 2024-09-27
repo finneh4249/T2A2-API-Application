@@ -1,4 +1,7 @@
 """
+This module contains the Comment model and its associated schema.
+
+The Comment model represents a comment in the database.
 """
 
 from init import db, ma
@@ -6,6 +9,31 @@ from marshmallow import fields
 from marshmallow.validate import Regexp
 
 class Comment(db.Model):
+    """
+    Represents a comment in the database.
+
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the comment.
+    user_id : int
+        ID of the user who wrote the comment.
+    post_id : int
+        ID of the post the comment belongs to.
+    content : str
+        Content of the comment.
+    created_at : datetime
+        Date and time the comment was created.
+    updated_at : datetime
+        Date and time the comment was last updated.
+
+    Relationships
+    -------------
+    user : User
+        The user who wrote the comment.
+    post : Post
+        The post the comment belongs to.
+    """
     __tablename__ = 'comments'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -20,16 +48,22 @@ class Comment(db.Model):
 
 class CommentSchema(ma.Schema):
     """
-    Schema for serializing and deserializing Like objects.
+    Schema for serializing and deserializing Comment objects.
 
     Attributes
     ----------
     id : int
-        Unique identifier for the like.
+        Unique identifier for the comment.
     user_id : int
-        ID of the user who liked the post.
+        ID of the user who wrote the comment.
     post_id : int
-        ID of the post that was liked.
+        ID of the post the comment belongs to.
+    content : str
+        Content of the comment.
+    created_at : datetime
+        Date and time the comment was created.
+    updated_at : datetime
+        Date and time the comment was last updated.
     """
     id = fields.Integer(dump_only=True)
     user_id = fields.Integer(required=True)
@@ -44,7 +78,7 @@ class CommentSchema(ma.Schema):
 
         Attributes
         ----------
-        model : Like
+        model : Comment
             The model to serialize.
         """
         fields = ('id', 'user_id', 'post_id', 'content', 'created_at', 'updated_at')
