@@ -96,7 +96,7 @@ def create_app():
             A 400 error response with a JSON body containing the error
             messages.
         """
-        return {"error": error.messages}, 400
+        return {"validation_error": error.messages}, 400
 
     @app.errorhandler(Exception)
     def handle_sqlalchemy_error(error):
