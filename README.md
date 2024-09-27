@@ -54,7 +54,7 @@ While working on the project I realised that some features that I was initially 
 ![issue_8](./docs/planning/issue_8.png)
 ![issue_9](./docs/planning/issue_9.png)
 
-### Milestone 7: Testing and Deployment
+### Milestone 7: Testing and Deployment (Deployment other than Local Not Implemented)
 
 ![issue_10](./docs/planning/issue_10.png)
 ![issue_10_2](./docs/planning/issue_10_2.png)
