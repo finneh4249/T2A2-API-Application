@@ -10,10 +10,56 @@
 
 ## Task Allocation and Tracking
 
-- **Project Management Tool:** Utilise a tool like Trello or Asana to create boards, tasks, and assign them to team members.
-- **Task Breakdown:** Break down the project into smaller, manageable tasks, such as designing the database, implementing API endpoints, and testing.
-- **Timelines:** Set deadlines for each task and track progress to ensure timely completion.
-- **Collaboration:** Use tools like GitHub or GitLab for version control and collaboration among team members.
+### Project Planning
+
+This project utilised GitHub Projects to manage the project.
+Between September 8th and 15th, the project was created, and initial planning was completed.
+
+While working on the project I realised that some features that I was initially planning to create would be far too complex and outside of the scope of the project, as such, I decided instead to focus more on other parts of the project to enhance their functionality.
+
+- [GitHub Projects](https://github.com/finneh4249/t2a2-api-application/projects/1)
+
+![timeline](./docs/planning/timeline.png)
+![main_board](./docs/planning/main_board.png)
+
+### Milestones
+
+![milestone1](./docs/planning/milestone1.png)
+![milstones](./docs/planning/milestones.png)
+
+### Milestone 1: Planning
+
+![issue_2](./docs/planning/issue_2.png)
+
+### Milestone 2: User Management
+
+![issue_3](./docs/planning/issue_3.png)
+
+### Milestone 3: Post Management
+
+![issue_4](./docs/planning/issue_4.png)
+![issue_12](./docs/planning/issue_12.png)
+
+### Milestone 4: Comments and Notifications
+
+![issue_5](./docs/planning/issue_5.png)
+![issue_6](./docs/planning/issue_6.png)
+
+### Milestone 5: Following and Friends
+
+![issue_7](./docs/planning/issue_7.png)
+
+### Milestone 6: Search and Analytics (Not Implemented)
+
+![issue_8](./docs/planning/issue_8.png)
+![issue_9](./docs/planning/issue_9.png)
+
+### Milestone 7: Testing and Deployment
+
+![issue_10](./docs/planning/issue_10.png)
+![issue_10_2](./docs/planning/issue_10_2.png)
+![issue_11](./docs/planning/issue_11.png)
+![issue_13](./docs/planning/issue_13.png)
 
 ## Third-Party Services, Packages, and Dependencies
 
@@ -224,7 +270,7 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Response Format:** JSON object representing the newly created user
   - **Example Request:**
     ```
-    curl -X POST http://localhost:5000/users -d '{"username": "newuser", "email": "newuser@example.com", "password": "password123"}'
+    curl -X POST http://localhost:5000/auth/register -d '{"username": "newuser", "email": "newuser@example.com", "password": "password123"}'
     ```
   - **Example Response:**
     ```json
@@ -245,21 +291,92 @@ The ERD illustrates the draft of the relationships between entities in the datab
     - `token`: Token to confirm the user's email address
   - **Response Format:** No response body
   - **Example Request:**
+  ```bash
+  curl -X POST http://localhost:5000/auth/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY
+  ```
   - **Example Response:**
+  ```json
+  {
+    "message": "Email confirmed successfully"
+  }
+  ```
   - 
 - **GET /auth/forgot-password**
+  - **HTTP Method:** GET
+  - **Request Parameters:**
+    - `?user_id`: ID of the user to reset the password
+  - **Response Format:** No response body
+  - **Example Request:**
+  ```bash
+  curl -X GET http://localhost:5000/auth/forgot-password?user_id=1
+  ```
+  - **Example Response:**
+   ```json
+   {
+     "message": "Password reset link created. Normally this would be sent to your email. For the purposes of this assignment, the link will be displayed here.",
+     "reset_url": "http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY"
+   }
+   ```
 - **PUT/PATCH /auth/reset-password/{token}**
+  - **HTTP Method:** PUT/PATCH
+  - **Request Parameters:**
+    - `token`: (In URL) Token to reset the user's password
+    - `password`: New password for the user.
+  - **Example Request:**
+```bash
+curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY
+```
+  - **Example Response:**
+  ```json
+  {
+    "message": "Password reset successful",
+    "user":{
+      "id": 1,
+      "username": "john_doe",
+      "email": "john@example.com",
+      "bio": "I like trainZ",
+      "is_admin": false,
+      "is_confirmed": true,
+      "created_at": "2022-02-22T20:30:00.000000",
+    }
+  }
+  ```
 - **PUT/PATCH /auth/change-password**
+  - **HTTP Method:** PUT/PATCH
+  - **Request Parameters:**
+    - `old_password`: Old password for the user.
+    - `new_password`: New password for the user.
+  - **Authorization**: JWT token required in the `Authorization` header
+  - **Example Request:**
+  ```bash
+  curl -X http://localhost:5000/auth/change-password -H "Authorization: Bearer <your_token>" -d '{"old_password": "old_password", "new_password": "new_password"}'
+  ```
+  - **Example Response:**
+  ```json
+  {
+    "message": "Password changed successfully",
+    "user":{
+      "id": 1,
+      "username": "john_doe",
+      "email": "john@example.com",
+      "bio": "I like trainZ",
+      "is_admin": false,
+      "is_confirmed": true,
+      "created_at": "2022-02-22T20:30:00.000000",
+    }
+  }
+  ```
 -
 - **DELETE /auth/unregister**
 
   - **HTTP Method:** DELETE
   - **Request Parameters:**
     - `user_id`: ID of the user to delete
+  - **Authorization**: JWT token required in the `Authorization` header
   - **Response Format:** No response body
   - **Example Request:**
     ```
-    curl -X DELETE http://localhost:5000/users/1
+    curl -X DELETE http://localhost:5000/users/1 -H "Authorization: Bearer <your_token>"
     ```
 
 ### **Posts**
@@ -270,10 +387,11 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Request Parameters:**
     - `page` (optional): Page number for pagination
     - `per_page` (optional): Number of posts per page
+  - **Authorization**: JWT token required in the `Authorization` header, `Administration` permissions are also required to access this endpoint.
   - **Response Format:** JSON array of post objects (id, user_id, content, created_at, updated_at, likes_count, comments_count)
   - **Example Request:**
     ```
-    curl http://localhost:5000/posts
+    curl http://localhost:5000/posts -H "Authorization: Bearer <your_token>"
     ```
   - **Example Response:**
     ```json
@@ -304,10 +422,12 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **HTTP Method:** GET
   - **Request Parameters:**
     - `post_id`: ID of the post to retrieve
+  - **Authorization:** JWT token required in the `Authorization` header
+  - **Requires Administrator Permissions**: Yes
   - **Response Format:** JSON object representing the post
   - **Example Request:**
     ```
-    curl http://localhost:5000/posts/1
+    curl http://localhost:5000/posts/1 -H "Authorization: Bearer <your_token>"
     ```
   - **Example Response:**
     ```json
@@ -327,10 +447,11 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **HTTP Method:** POST
   - **Request Parameters:**
     - `content`
+  - **Authorization**: JWT token required in the `Authorization` header
   - **Response Format:** JSON object representing the newly created post
   - **Example Request:**
     ```
-    curl -X POST http://localhost:5000/posts -d '{"content": "This is a new post."}'
+    curl -X POST http://localhost:5000/posts -H "Authorization: Bearer <your_token>" -d '{"content": "This is a new post."}'
     ```
   - **Example Response:**
     ```json
@@ -345,16 +466,16 @@ The ERD illustrates the draft of the relationships between entities in the datab
     }
     ```
 
-- **PUT /posts/{post_id}**
+- **PUT / PATCH /posts/{post_id}**
 
-  - **HTTP Method:** PUT
+  - **HTTP Method:** PUT / PATCH
   - **Request Parameters:**
     - `post_id`: ID of the post to update
-    - `content` (optional)
+    - `content`
   - **Response Format:** JSON object representing the updated post
   - **Example Request:**
     ```
-    curl -X PUT http://localhost:5000/posts/1 -d '{"content": "Updated post content."}'
+    curl -X PUT http://localhost:5000/posts/1 -H "Authorization: Bearer <your_token>" -d '{"content": "Updated post content."}'
     ```
   - **Example Response:**
     ```json
@@ -376,10 +497,205 @@ The ERD illustrates the draft of the relationships between entities in the datab
     - `post_id`: ID of the post to delete
   - **Response Format:** No response body
   - **Example Request:**
+    ```bash
+    curl -X DELETE http://localhost:5000/posts/1 -H "Authorization: Bearer <your_token>"
     ```
-    curl -X DELETE http://localhost:5000/posts/1
-    ```
+### **Feed**
 
+- **GET /feed**
+  - **HTTP Method:** GET
+  - **Request Parameters:**
+    - `?page`: (Optional) Page number of the feed
+    - `?per_page`: (Optional) Number of posts per page
+  - **Authorization**: JWT token required in the `Authorization` header
+  - **Example Request:**
+```bash
+curl http://localhost:5000/feed -H "Authorization: Bearer <your_token>"
+```
+  - **Example Response:**
+```json
+  [
+  {
+    "id": 3,
+    "title": "Superman Test Post",
+    "content": "This is a big good juju test post on the ethanc account!\nI like trains!",
+    "likes_count": 0,
+    "comments_count": 0,
+    "created_at": "2024-09-24T18:29:50.058701",
+    "updated_at": "2024-09-24T18:29:58.624499",
+    "author": {
+      "id": 4,
+      "username": "ethanc"
+    },
+    "likes": [],
+    "comments": []
+  },
+  {
+    "id": 2,
+    "title": "Another Post",
+    "content": "This is my second post. Created by the User",
+    "likes_count": 1,
+    "comments_count": 1,
+    "created_at": "2024-09-24T05:00:18.568652",
+    "updated_at": null,
+    "author": {
+      "id": 2,
+      "username": "user"
+    },
+    "likes": [
+      {
+        "id": 1,
+        "user_id": 1
+      }
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "content": "This is a comment on the second post.",
+        "created_at": "2024-09-24T05:00:18.569052",
+        "updated_at": null
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "title": "Hello, World!",
+    "content": "This is my first post. Created by the Admin!",
+    "likes_count": 2,
+    "comments_count": 2,
+    "created_at": "2024-09-24T05:00:18.568466",
+    "updated_at": null,
+    "author": {
+      "id": 1,
+      "username": "admin"
+    },
+    "likes": [
+      {
+        "id": 2,
+        "user_id": 2
+      },
+      {
+        "id": 3,
+        "user_id": 4
+      }
+    ],
+    "comments": [
+      {
+        "id": 2,
+        "user_id": 2,
+        "content": "This is a comment on the first post.",
+        "created_at": "2024-09-24T05:00:18.569164",
+        "updated_at": null
+      },
+      {
+        "id": 4,
+        "user_id": 4,
+        "content": "This is a big good juju test comment on the first post!",
+        "created_at": "2024-09-24T18:21:22.664342",
+        "updated_at": null
+      }
+    ]
+  }
+]
+```
+- **GET /feed/following**
+  - **HTTP Method:** GET
+  - **Request Parameters:**
+    - `?page`: (Optional) Page number of the feed
+    - `?per_page`: (Optional) Number of posts per page
+  - **Authorization**: JWT token required in the `Authorization` header
+  - **Example Request:**
+```bash
+curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>"
+```
+  - **Example Response:**
+```json
+  [
+  {
+    "id": 3,
+    "title": "Superman Test Post",
+    "content": "This is a big good juju test post on the ethanc account!\nI like trains!",
+    "likes_count": 0,
+    "comments_count": 0,
+    "created_at": "2024-09-24T18:29:50.058701",
+    "updated_at": "2024-09-24T18:29:58.624499",
+    "author": {
+      "id": 4,
+      "username": "ethanc"
+    },
+    "likes": [],
+    "comments": []
+  },
+  {
+    "id": 2,
+    "title": "Another Post",
+    "content": "This is my second post. Created by the User",
+    "likes_count": 1,
+    "comments_count": 1,
+    "created_at": "2024-09-24T05:00:18.568652",
+    "updated_at": null,
+    "author": {
+      "id": 2,
+      "username": "user"
+    },
+    "likes": [
+      {
+        "id": 1,
+        "user_id": 1
+      }
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "content": "This is a comment on the second post.",
+        "created_at": "2024-09-24T05:00:18.569052",
+        "updated_at": null
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "title": "Hello, World!",
+    "content": "This is my first post. Created by the Admin!",
+    "likes_count": 2,
+    "comments_count": 2,
+    "created_at": "2024-09-24T05:00:18.568466",
+    "updated_at": null,
+    "author": {
+      "id": 1,
+      "username": "admin"
+    },
+    "likes": [
+      {
+        "id": 2,
+        "user_id": 2
+      },
+      {
+        "id": 3,
+        "user_id": 4
+      }
+    ],
+    "comments": [
+      {
+        "id": 2,
+        "user_id": 2,
+        "content": "This is a comment on the first post.",
+        "created_at": "2024-09-24T05:00:18.569164",
+        "updated_at": null
+      },
+      {
+        "id": 4,
+        "user_id": 4,
+        "content": "This is a big good juju test comment on the first post!",
+        "created_at": "2024-09-24T18:21:22.664342",
+        "updated_at": null
+      }
+    ]
+  }
+]
+```
 ### **Comments**
 
 - **GET /posts/{post_id}/comments**
@@ -391,8 +707,8 @@ The ERD illustrates the draft of the relationships between entities in the datab
     - `per_page` (optional): Number of comments per page
   - **Response Format:** JSON array of comment objects (id, user_id, post_id, content, created_at, updated_at)
   - **Example Request:**
-    ```
-    curl http://localhost:5000/posts/1/comments
+    ```bash
+    curl http://localhost:5000/posts/1/comments -H "Authorization: Bearer <your_token>"
     ```
   - **Example Response:**
     ```json
@@ -425,7 +741,7 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Response Format:** JSON object representing the newly created comment
   - **Example Request:**
     ```
-    curl -X POST http://localhost:5000/posts/1/comments -d '{"content": "This is a comment."}'
+    curl -X POST http://localhost:5000/posts/1/comments -H "Authorization: Bearer <your_token>" -d '{"content": "This is a comment."}'
     ```
   - **Example Response:**
     ```json
@@ -439,7 +755,7 @@ The ERD illustrates the draft of the relationships between entities in the datab
     }
     ```
 
-- **PUT /comments/{comment_id}**
+- **PUT /posts/{post_id}/comments/{comment_id}**
 
   - **HTTP Method:** PUT
   - **Request Parameters:**
@@ -448,7 +764,7 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Response Format:** JSON object representing the updated comment
   - **Example Request:**
     ```
-    curl -X PUT http://localhost:5000/comments/1 -d '{"content": "Updated comment."}'
+    curl -X PUT http://localhost:5000/comments/1 -H "Authorization: Bearer <your_token>" -d '{"content": "Updated comment."}'
     ```
   - **Example Response:**
     ```json
@@ -462,7 +778,7 @@ The ERD illustrates the draft of the relationships between entities in the datab
     }
     ```
 
-- **DELETE /comments/{comment_id}**
+- **DELETE /posts/{post_id}comments/{comment_id}**
 
   - **HTTP Method:** DELETE
   - **Request Parameters:**
@@ -470,12 +786,12 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Response Format:** No response body
   - **Example Request:**
     ```
-    curl -X DELETE http://localhost:5000/comments/1
+    curl -X DELETE http://localhost:5000/comments/1 -H "Authorization: Bearer <your_token>"
     ```
 
 ### **Likes**
 
-- **POST /posts/{post_id}/likes**
+- **POST /posts/{post_id}/like**
 
   - **HTTP Method:** POST
   - **Request Parameters:**
@@ -483,10 +799,10 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Response Format:** No response body
   - **Example Request:**
     ```
-    curl -X POST http://localhost:5000/posts/1/likes
+    curl -X POST http://localhost:5000/posts/1/likes -H "Authorization: Bearer <your_token>"
     ```
 
-- **DELETE /posts/{post_id}/likes**
+- **DELETE /posts/{post_id}/like**
 
   - **HTTP Method:** DELETE
   - **Request Parameters:**
@@ -494,8 +810,41 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Response Format:** No response body
   - **Example Request:**
     ```
-    curl -X DELETE http://localhost:5000/posts/1/likes
+    curl -X DELETE http://localhost:5000/posts/1/likes -H "Authorization: Bearer <your_token>"
     ```
+  - **Example Response:**
+```json
+  {
+    "message": "Post unliked successfully"
+  }
+  ```
+
+- **GET /posts/{post_id}/likes**
+
+  - **HTTP Method:** GET
+  - **Request Parameters:**
+  - **Response Format:** No response body
+  - **Example Request:**
+  ```bash
+  curl http://localhost:5000/posts/1/likes -H "Authorization: Bearer <your_token>"
+  ```
+  - **Example Response:**
+  ```json
+  {
+    "likes": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "post_id": 1
+      },
+      {
+        "id": 2,
+        "user_id": 2,
+        "post_id": 1
+      }
+    ]
+  }
+  ```
 
 ### **Follows**
 
@@ -590,30 +939,20 @@ The ERD illustrates the draft of the relationships between entities in the datab
 6. **Configure database settings:**
    Update the `.env.example` file with your database connection details, including the username, password, database name, and host.
    Rename the `.env.example` file to `.env`.
+
 7. **Create the database:**
-8. Run
+  In order to create the database, use the following commands:
 
-   ```bash
-   flask db create
-   ```
+  ```bash
+    flask cli db_create
+  ```
+This command will create all the tables in the database, and seed it with default values.
 
-   then
-
-```bash
-  flask db seed
-```
-
-to create and seed the database with default values.
-
-**Usage:**
-
-1. **Run the application:**
-
-   ```bash
-   flask run
-   ```
-
-2. **Access API endpoints:**
+8. **Run the application:**
+  ```bash
+  flask run
+  ```
+9.  **Access API endpoints:**
    Use your preferred HTTP client (e.g., Postman, curl, Insomnia, etc) to interact with the API endpoints.
 
 ## Additional Information
@@ -622,58 +961,35 @@ to create and seed the database with default values.
 - **Error handling:** The API returns appropriate HTTP status codes and error messages.
 - **Pagination:** For large result sets, pagination is supported.
 - **Rate limiting:** To prevent abuse, rate limiting is implemented.
-- # **Confirmation Emails:** To keep simplicity in the program, confirmation emails are not sent to the user, however, a confirmation link is returned in the endpoint. This is a simulated behaviour for simplicities sake for this assignment.
+- **Confirmation Emails:** To keep simplicity in the program, confirmation emails are not sent to the user, however, a confirmation link is returned in the endpoint. This is a simulated behaviour for simplicities sake for this assignment.
 
-## Project Planning
+### Error Handling
 
-This project utilised GitHub Projects to manage the project.
-Between September 8th and 15th, the project was created, and initial planning was completed.
+The API implements robust error handling to provide informative feedback to clients in case of exceptions or unexpected situations. When an error occurs, the API returns a JSON response with a descriptive error message and an appropriate HTTP status code.
 
-While working on the project I realised that some features that I was initially planning to create would be far too complex and outside of the scope of the project, as such, I decided instead to focus more on other parts of the project to enhance their functionality.
+```py
+@user_controller.route('/users/<user_id>')
+def get_user(user_id):
+  user = User.query.get(user_id)
+  if user is None:
+    return {"message": "User not found"}, 404
+```
 
-- [GitHub Projects](https://github.com/finneh4249/t2a2-api-application/projects/1)
+In this example, the code attempts to retrieve the user with the specified user_id. If the user is not found, a `404 Not Found` error is raised. 
+Other errors that may commonly occur during the execution of the code are handled in the same way, for example, a `401 Unauthorized` error is returned if the user is not the owner of the requested resource.
 
-![timeline](./docs/planning/timeline.png)
-![main_board](./docs/planning/main_board.png)
+With the exception of a `Marshamallow Validation Error`, if any other exception occurs, a generic `500 Internal Server Error` is returned with an error message.
 
-### Milestones
+### CLI Commands
 
-![milestone1](./docs/planning/milestone1.png)
-![milstones](./docs/planning/milestones.png)
+The CLI commands are provided for convenience. You can use them to create or drop the database, and create a new user, or admin user.
 
-### Milestone 1: Planning
-
-![issue_2](./docs/planning/issue_2.png)
-
-### Milestone 2: User Management
-
-![issue_3](./docs/planning/issue_3.png)
-
-### Milestone 3: Post Management
-
-![issue_4](./docs/planning/issue_4.png)
-![issue_12](./docs/planning/issue_12.png)
-
-### Milestone 4: Comments and Notifications
-
-![issue_5](./docs/planning/issue_5.png)
-![issue_6](./docs/planning/issue_6.png)
-
-### Milestone 5: Following and Friends
-
-![issue_7](./docs/planning/issue_7.png)
-
-### Milestone 6: Search and Analytics
-
-![issue_8](./docs/planning/issue_8.png)
-![issue_9](./docs/planning/issue_9.png)
-
-### Milestone 7: Testing and Deployment
-
-![issue_10](./docs/planning/issue_10.png)
-![issue_10_2](./docs/planning/issue_10_2.png)
-![issue_11](./docs/planning/issue_11.png)
-![issue_13](./docs/planning/issue_13.png)
+```bash
+flask cli db_create # Creates all tables in the database.
+flask cli db_drop # Drops all tables in the database.
+flask cli create_user <username> <email> <password> <bio> [--admin] # Creates a user, use the --admin flag to create an admin user.
+flask cli delete_user <username> # Deletes the selected user from the database.
+```
 
 ## Design Requirements
 
