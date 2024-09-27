@@ -141,12 +141,16 @@ def update_comment(post_id, comment_id):
         return {"message": "Comment not found"}, 404
 
     if comment.user_id != get_jwt_identity():
-        return {"message": "Unauthorized"}, 401
+        return {"message": "You can only edit your own comments"}, 401
 
     data = request.json
 
-    comment.content = data['content'] or comment.content
+    #TODO: Add check for data['content'] and return a human readable error if missing.
 
+    if data['content'] == comment.content:
+        return {"message": "Comment content must be different to existing content."}, 400
+
+    comment.content = data['content']
     db.session.commit()
 
     return comment_schema.dump(comment)

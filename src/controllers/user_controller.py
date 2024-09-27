@@ -22,7 +22,7 @@ user_controller = Blueprint('user_controller', __name__, url_prefix='/users')
 
 
 @user_controller.route('/', methods=['GET'])
-# TODO: Add Authentication?
+@jwt_required()
 def get_users():
     """
     Gets a list of all users in the database.
@@ -37,7 +37,7 @@ def get_users():
     return user_arr
 
 
-@user_controller.route('/profile/<user_id>', methods=['GET'])
+@user_controller.route('/<user_id>/profile', methods=['GET'])
 @jwt_required()
 def get_user(user_id):
     """
@@ -60,11 +60,13 @@ def get_user(user_id):
     return profile_schema.jsonify(user)
 
 
-@user_controller.route('/profile/<user_id>', methods=['PUT', 'PATCH'])
+@user_controller.route('/<user_id>/profile', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_user(user_id):
     """
     Updates a user in the database.
+
+    The 
 
     Parameters
     ----------
@@ -97,7 +99,7 @@ def update_user(user_id):
     return {"message": message, "user": profile}
 
 
-@user_controller.route('/profile/<user_id>/timeline', methods=['GET'])
+@user_controller.route('/<user_id>/timeline', methods=['GET'])
 @jwt_required()
 def get_user_timeline(user_id):
     """
@@ -121,3 +123,4 @@ def get_user_timeline(user_id):
         Post.created_at.desc()).all()
     post_arr = posts_schema.dump(posts)
     return post_arr
+

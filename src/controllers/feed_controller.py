@@ -52,5 +52,19 @@ def get_following_feed():
     list of Post
         A list of all posts from followed users.
     """
-    pass
+    user_id = get_jwt_identity()
 
+    follows = Follow.query.filter_by(follower_id=user_id).all()
+
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+
+    followed_ids = [follow.followed_id for follow in follows]
+
+    posts = Post.query.filter(Post.user_id.in_(followed_ids)).order_by(Post.created_at.desc())
+
+    paginated_posts = posts.paginate(page=page, per_page=per_page, error_out=False)
+
+    post_arr = posts_schema.jsonify(paginated_posts.items)
+
+    return post_arr

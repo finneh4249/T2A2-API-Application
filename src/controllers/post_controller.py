@@ -54,7 +54,7 @@ def create_post():
 
     return post_schema.dump(new_post)
 
-@post_controller.route('/<post_id>', methods=['GET'])
+@post_controller.route('/<int:post_id>', methods=['GET'])
 @jwt_required()
 def get_post(post_id):
     """
@@ -77,7 +77,7 @@ def get_post(post_id):
     return post_schema.dump(post)
 
 
-@post_controller.route('/<post_id>', methods=['PUT', 'PATCH'])
+@post_controller.route('/<int:post_id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_post(post_id):
     """
@@ -111,7 +111,7 @@ def update_post(post_id):
     return post_schema.dump(post)
 
 
-@post_controller.route('/<post_id>', methods=['DELETE'])
+@post_controller.route('/<int:post_id>', methods=['DELETE'])
 @jwt_required()
 def delete_post(post_id):
     """
