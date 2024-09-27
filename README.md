@@ -103,7 +103,7 @@ The ERD illustrates the draft of the relationships between entities in the datab
 
 ### Final ERD
 
-![ERD](./docs/final_erd.png)
+![ERD](./docs/final_erd.jpg)
 
 ## Implemented Models and Relationships
 
