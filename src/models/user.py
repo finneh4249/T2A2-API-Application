@@ -46,6 +46,15 @@ class User(db.Model):
         The users the user is following.
     followers : list[Follow]
         The users that are following the user.
+
+    Notes
+    -----
+    The relationships are defined as follows:
+    - A user can make many posts.
+    - A user can make many likes.
+    - A user can make many comments.
+    - A user can follow many users.
+    - A user can be followed by many users.
     """
     __tablename__ = 'users'
 

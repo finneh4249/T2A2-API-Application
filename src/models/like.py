@@ -1,4 +1,21 @@
 """
+Represents a like in the database.
+
+A like is a connection between a user and a post where the user has
+expressed that they like the post. A like can be thought of as a
+"vote" for a post, saying that the user liked the post.
+
+Attributes
+----------
+id : int
+    Unique identifier for the like.
+user_id : int
+    ID of the user who liked the post.
+post_id : int
+    ID of the post that was liked.
+created_at : datetime
+    Date and time the like was created.
+
 """
 
 from init import db, ma
@@ -8,6 +25,9 @@ class Like(db.Model):
     """
     Represents a like in the database.
 
+    A like is a connection between a user and a post where the user has
+    expressed that they like the post.
+
     Attributes
     ----------
     id : int
@@ -16,6 +36,13 @@ class Like(db.Model):
         ID of the user who liked the post.
     post_id : int
         ID of the post that was liked.
+
+    Relationships
+    -------------
+    user : User
+        The user who liked the post.
+    post : Post
+        The post that was liked.
 
     """
     __tablename__ = 'likes'

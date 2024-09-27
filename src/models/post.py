@@ -1,7 +1,12 @@
 """
 This module contains the Post model and its associated schema.
 
-The Post model represents a post in the database.
+The Post model represents a post in the database. It contains
+attributes for the post's id, title, content, author_id, created_at,
+and updated_at.
+
+The PostSchema is a Marshmallow schema used to serialize and
+deserialize the Post model.
 """
 from marshmallow import fields, validates, ValidationError
 from marshmallow.validate import Regexp
@@ -25,6 +30,17 @@ class Post(db.Model):
         ID of the user who created the post.
     created_at : datetime
         Date and time the post was created.
+    updated_at : datetime
+        Date and time the post was last updated.
+
+    Relationships
+    -------------
+    author : User
+        The user who created the post.
+    comments : list[Comment]
+        The comments on the post.
+    likes : list[Like]
+        The likes on the post.
     """
     __tablename__ = 'posts'
 
@@ -71,8 +87,6 @@ class PostSchema(ma.Schema):
     likes_count = fields.Method(serialize="get_likes_count")
     comments_count = fields.Method(serialize="get_comments_count")
 
-    # TODO: Add like count to the schema based on the number of likes a post has
-    # like_count = fields.Integer(dump_only=True)
 
     class Meta:
         """
@@ -119,4 +133,3 @@ class PostSchema(ma.Schema):
 
 post_schema = PostSchema()
 posts_schema = PostSchema(many=True)
-
