@@ -19,7 +19,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from init import db
 from utils import admin_required
 from models.post import Post, post_schema, posts_schema
-from models.like import likes_schema
 
 
 post_controller = Blueprint('post_controller', __name__, url_prefix='/posts')

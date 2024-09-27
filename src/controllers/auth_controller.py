@@ -8,12 +8,13 @@ The endpoints are:
 - **POST /forgot_password**: Sends a forgot password email to the user.
 - **POST /reset_password**: Resets a user's password if the token is valid.
 """
+from datetime import datetime, timedelta
+
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, decode_token
-from datetime import datetime
 
 from init import db, bcrypt
-from models.user import User, user_schema, profile_schema, UserSchema
+from models.user import User, user_schema, profile_schema
 
 
 auth_controller = Blueprint('auth', __name__, url_prefix='/auth')
@@ -98,7 +99,8 @@ def create_user():
 
     # Create the user in the database
     user = User(username=username, email=email,
-                password_hash=hash_password, is_confirmed=False)
+                password_hash=hash_password, bio = bio, 
+                is_confirmed=False)
     db.session.add(user)
     db.session.commit()
 
@@ -173,7 +175,8 @@ def confirm(token):
     # Return the confirmed user
     # Dump the `user` object to a JSON representation
     # Use the `profile_schema` to dump the user object
-    return {"message": "User confirmed successfully, you may now log in.", "user": profile_schema.dump(user)}
+    return {"message": "User confirmed successfully, you may now log in.", 
+    "user": profile_schema.dump(user)}
 
 
 @auth_controller.route('/forgot-password', methods=['GET'], endpoint="forgot_user_password")

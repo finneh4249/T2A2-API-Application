@@ -12,7 +12,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from init import db
 from models.follow import Follow, follow_schema, follows_schema
-from models.user import User, user_schema, users_schema
+from models.user import User, users_schema
 
 
 follow_controller = Blueprint(

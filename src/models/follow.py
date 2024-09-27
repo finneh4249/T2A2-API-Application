@@ -7,9 +7,9 @@ attributes for the id, follower_id, and followed_id.
 The FollowSchema is a Marshmallow schema used to serialize and
 deserialize the Follow model.
 """
-from init import db, ma
 from marshmallow import fields
 
+from init import db, ma
 
 class Follow(db.Model):
     """

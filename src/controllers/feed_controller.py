@@ -15,8 +15,7 @@ The endpoints are:
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from init import db
-from models.post import Post, post_schema, posts_schema
+from models.post import Post, posts_schema
 
 feed_controller = Blueprint('feed_controller', __name__, url_prefix='/feed')
 

@@ -3,10 +3,11 @@ This module contains the Comment model and its associated schema.
 
 The Comment model represents a comment in the database.
 """
-
-from init import db, ma
 from marshmallow import fields
 from marshmallow.validate import Regexp
+
+from init import db, ma
+
 
 
 class Comment(db.Model):

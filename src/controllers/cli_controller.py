@@ -9,10 +9,12 @@ The commands are:
 - `delete_user <username>`: Delete the selected user from the database.
 
 """
+from datetime import datetime
 
 import click
 from flask import Blueprint
-from datetime import datetime
+from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
+
 
 from init import db, bcrypt
 from models.user import User
@@ -21,7 +23,6 @@ from models.like import Like
 from models.comment import Comment
 from models.follow import Follow
 
-from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
 
 
 cli_controller = Blueprint('cli', __name__)

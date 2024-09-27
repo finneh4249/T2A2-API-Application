@@ -8,7 +8,7 @@ profile picture URL, and bio.
 The UserSchema is a Marshmallow schema used to serialize and
 deserialize the User model.
 """
-from marshmallow import fields, validates, ValidationError
+from marshmallow import fields
 from marshmallow.validate import Regexp, And, Length
 
 from init import db, ma

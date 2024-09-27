@@ -16,7 +16,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from init import db
 
-from models.user import User, user_schema, users_schema, profile_schema, UserSchema
+from models.user import User, user_schema, users_schema, profile_schema
 from models.post import Post, posts_schema
 user_controller = Blueprint('user_controller', __name__, url_prefix='/users')
 
@@ -32,7 +32,6 @@ def get_users():
     list of User
         A list of all users in the database.
     """
-    # TODO: Add pagination
     # Get the page number from the request query parameters, default to 1
     page = request.args.get('page', 1, type=int)
 

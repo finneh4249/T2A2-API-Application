@@ -17,10 +17,9 @@ created_at : datetime
     Date and time the like was created.
 
 """
-
-from init import db, ma
 from marshmallow import fields
 
+from init import db, ma
 
 class Like(db.Model):
     """

@@ -9,10 +9,10 @@ The endpoints are:
 - **PUT /comments/{comment_id}**: Update a comment.
 - **DELETE /comments/{comment_id}**: Delete a comment.
 """
+from datetime import datetime
 
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from datetime import datetime
 
 from init import db
 from models.comment import Comment, comment_schema, comments_schema

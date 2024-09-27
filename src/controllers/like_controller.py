@@ -13,7 +13,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from init import db
 from models.post import Post, post_schema
 from models.like import Like, likes_schema
-from models.user import User, user_schema
 
 
 like_controller = Blueprint(
