@@ -22,7 +22,6 @@ from models.post import Post, post_schema, posts_schema
 from models.like import likes_schema
 
 
-
 post_controller = Blueprint('post_controller', __name__, url_prefix='/posts')
 
 
@@ -66,6 +65,7 @@ def get_post(post_id):
     post_arr = post_schema.dump(post)
     return {"message": "Post retrieved successfully", "data": post_arr}
 
+
 @post_controller.route('/', methods=['POST'])
 @jwt_required()
 def create_post():
@@ -82,7 +82,8 @@ def create_post():
     title = request.json['title']
     content = request.json['content']
 
-    new_post = Post(title=title, content=content, created_at=datetime.now(), author_id=get_jwt_identity())
+    new_post = Post(title=title, content=content,
+                    created_at=datetime.now(), author_id=get_jwt_identity())
     db.session.add(new_post)
     db.session.commit()
 
@@ -150,4 +151,3 @@ def delete_post(post_id):
     db.session.commit()
 
     return {"message": "Post deleted successfully"}
-

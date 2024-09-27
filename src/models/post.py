@@ -87,7 +87,6 @@ class PostSchema(ma.Schema):
     likes_count = fields.Method(serialize="get_likes_count")
     comments_count = fields.Method(serialize="get_comments_count")
 
-
     class Meta:
         """
         Configuration for the PostSchema.
@@ -98,38 +97,41 @@ class PostSchema(ma.Schema):
             The fields to include in the serialized representation of the Post.
         """
 
-        fields = ('id', 'title', 'content','likes_count','comments_count', 'created_at', 'updated_at', 'author', 'likes', 'comments')
+        fields = ('id', 'title', 'content', 'likes_count', 'comments_count',
+                  'created_at', 'updated_at', 'author', 'likes', 'comments')
 
     def get_likes_count(self, post, **kwargs):
         """
         Returns the number of likes a post has.
-    
+
         Parameters
         ----------
         post : Post
             The post to get the like count for.
-    
+
         Returns
         -------
         int
             The number of likes the post has.
         """
         return len(post.likes)
+
     def get_comments_count(self, post, **kwargs):
         """
         Returns the number of likes a post has.
-    
+
         Parameters
         ----------
         post : Post
             The post to get the like count for.
-    
+
         Returns
         -------
         int
             The number of likes the post has.
         """
         return len(post.comments)
+
 
 post_schema = PostSchema()
 posts_schema = PostSchema(many=True)

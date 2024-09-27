@@ -115,7 +115,7 @@ def create_user():
         "confirmation_url": confirmation_url
     }
 
-#TODO: Add delete user endpoint
+
 @auth_controller.route('/unregister', methods=['DELETE'])
 @jwt_required()
 def delete_user():
@@ -136,6 +136,7 @@ def delete_user():
 
     # Return a JSON message indicating the status of the deletion
     return {"message": "User deleted successfully"}
+
 
 @auth_controller.route('/confirm/<token>', methods=['POST'])
 def confirm(token):
@@ -173,6 +174,7 @@ def confirm(token):
     # Dump the `user` object to a JSON representation
     # Use the `profile_schema` to dump the user object
     return {"message": "User confirmed successfully, you may now log in.", "user": profile_schema.dump(user)}
+
 
 @auth_controller.route('/forgot-password', methods=['GET'], endpoint="forgot_user_password")
 def forgot_password():
@@ -216,6 +218,7 @@ def forgot_password():
         "message": "Password reset link created. Normally this would be sent to your email. For the purpose of this assignment, the link will be displayed here.",
         "reset_url": reset_url
     }
+
 
 @auth_controller.route('/reset-password/<token>', methods=['PUT', 'PATCH'], endpoint='reset_user_password_confirm')
 def reset_password(token):
@@ -261,6 +264,7 @@ def reset_password(token):
     # The `user` parameter is the user to serialize
     # The `message` parameter is the message to return
     return {"message": "Password reset successfully", "user": profile_schema.dump(user)}
+
 
 @auth_controller.route('/change-password', methods=['PUT', 'PATCH'], endpoint="change_user_password")
 @jwt_required()

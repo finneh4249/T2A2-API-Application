@@ -115,6 +115,5 @@ def create_app():
     # Return the configured Flask application
     return app
 
-
 app = create_app()
 

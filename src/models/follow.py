@@ -10,6 +10,7 @@ deserialize the Follow model.
 from init import db, ma
 from marshmallow import fields
 
+
 class Follow(db.Model):
     """
     Represents a follow in the database.
@@ -34,11 +35,14 @@ class Follow(db.Model):
     __tablename__ = 'follows'
 
     id = db.Column(db.Integer, primary_key=True)
-    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    follower_id = db.Column(
+        db.Integer, db.ForeignKey('users.id'), nullable=False)
+    followed_id = db.Column(
+        db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     follower = db.relationship('User', foreign_keys=[follower_id])
     follows = db.relationship('User', foreign_keys=[followed_id])
+
 
 class FollowSchema(ma.Schema):
     """
@@ -68,6 +72,7 @@ class FollowSchema(ma.Schema):
             The model to serialize.
         """
         fields = ('id', 'follower_id', 'followed_id')
+
 
 follow_schema = FollowSchema()
 follows_schema = FollowSchema(many=True)

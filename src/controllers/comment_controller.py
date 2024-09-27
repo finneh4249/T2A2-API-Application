@@ -43,14 +43,16 @@ def get_comments(post_id):
     per_page = request.args.get('per_page', 10, type=int)
 
     # Get the comments for the post
-    comments = Comment.query.filter_by(post_id=post_id).order_by(Comment.created_at.desc())
+    comments = Comment.query.filter_by(
+        post_id=post_id).order_by(Comment.created_at.desc())
 
     # If there are no comments, return a 404 error
     if not comments:
         return {"message": "No comments found"}, 404
 
     # Paginate the comments
-    paginated_comments = comments.paginate(page=page, per_page=per_page, error_out=False)
+    paginated_comments = comments.paginate(
+        page=page, per_page=per_page, error_out=False)
 
     # Dump the comments to a list of dictionaries
     comment_arr = comments_schema.dump(paginated_comments.items)
@@ -84,11 +86,11 @@ def create_comment(post_id):
     content = request.json['content']
     # Create a new comment with the given content and the current user
     new_comment = Comment(
-        user_id=get_jwt_identity(), 
-        post_id=post_id, 
-        content=content, 
+        user_id=get_jwt_identity(),
+        post_id=post_id,
+        content=content,
         created_at=datetime.now()
-        )
+    )
     db.session.add(new_comment)
     db.session.commit()
 

@@ -8,6 +8,7 @@ from init import db, ma
 from marshmallow import fields
 from marshmallow.validate import Regexp
 
+
 class Comment(db.Model):
     """
     Represents a comment in the database.
@@ -46,6 +47,7 @@ class Comment(db.Model):
     user = db.relationship('User', back_populates='comments')
     post = db.relationship('Post', back_populates='comments')
 
+
 class CommentSchema(ma.Schema):
     """
     Schema for serializing and deserializing Comment objects.
@@ -81,7 +83,9 @@ class CommentSchema(ma.Schema):
         model : Comment
             The model to serialize.
         """
-        fields = ('id', 'user_id', 'post_id', 'content', 'created_at', 'updated_at')
+        fields = ('id', 'user_id', 'post_id',
+                  'content', 'created_at', 'updated_at')
+
 
 comment_schema = CommentSchema()
 comments_schema = CommentSchema(many=True)

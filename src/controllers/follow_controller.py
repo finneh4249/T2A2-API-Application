@@ -15,7 +15,9 @@ from models.follow import Follow, follow_schema, follows_schema
 from models.user import User, user_schema, users_schema
 
 
-follow_controller = Blueprint('follow_controller', __name__, url_prefix='/users/<int:user_id>')
+follow_controller = Blueprint(
+    'follow_controller', __name__, url_prefix='/users/<int:user_id>')
+
 
 @follow_controller.route('/following', methods=['GET'], endpoint='get_following')
 @jwt_required()
@@ -41,6 +43,7 @@ def get_follows(user_id):
     follows = Follow.query.filter_by(follower_id=user_id).all()
     return follows_schema.jsonify(follows)
 
+
 @follow_controller.route('/followers', methods=['GET'], endpoint='get_followers')
 @jwt_required()
 def get_followers(user_id):
@@ -65,6 +68,7 @@ def get_followers(user_id):
     followers = Follow.query.filter_by(followed_id=user_id).all()
     # Return the followers as a list of user objects
     return follows_schema.jsonify(followers)
+
 
 @follow_controller.route('/follow', methods=['POST'])
 @jwt_required()
@@ -104,6 +108,7 @@ def create_follow(user_id):
     # Return the follow as JSON
     return follow_schema.jsonify(new_follow)
 
+
 @follow_controller.route('/follow', methods=['DELETE'], endpoint='unfollow')
 @jwt_required
 def unfollow(user_id):
@@ -124,7 +129,8 @@ def unfollow(user_id):
     current_user_id = get_jwt_identity()
 
     # Get the follow to delete
-    new_follow = Follow.query.filter_by(follower_id=current_user_id, followed_id=user_id).first()
+    new_follow = Follow.query.filter_by(
+        follower_id=current_user_id, followed_id=user_id).first()
 
     # Check if the follow was found
     if not new_follow:
@@ -136,6 +142,7 @@ def unfollow(user_id):
 
     # Return the deleted follow as JSON
     return follow_schema.jsonify(new_follow)
+
 
 @follow_controller.route('/friends', methods=['GET'])
 @jwt_required()
@@ -168,6 +175,7 @@ def get_user_friends(user_id):
 
     # Return the serialized friends
     return friends_arr
+
 
 @follow_controller.route('/suggested_friends', methods=['GET'])
 @jwt_required()

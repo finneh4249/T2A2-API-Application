@@ -33,16 +33,16 @@ def get_users():
         A list of all users in the database.
     """
     # TODO: Add pagination
-     # Get the page number from the request query parameters, default to 1
+    # Get the page number from the request query parameters, default to 1
     page = request.args.get('page', 1, type=int)
 
     # Get the number of posts to retrieve per page from the request query
     # parameters, default to 10
     per_page = request.args.get('per_page', 10, type=int)
 
-
     users = User.query.all()
-    paginated_users = users.paginate(page=page, per_page=per_page, error_out=False)
+    paginated_users = users.paginate(
+        page=page, per_page=per_page, error_out=False)
     user_arr = users_schema.jsonify(paginated_users.items)
     return user_arr
 
@@ -132,4 +132,3 @@ def get_user_timeline(user_id):
         Post.created_at.desc()).all()
     post_arr = posts_schema.dump(posts)
     return post_arr
-

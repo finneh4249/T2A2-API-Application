@@ -151,13 +151,12 @@ class UserSchema(ma.Schema):
             The fields to include in the serialized representation of the User.
         """
 
-        fields = ('id', 'username', 'email', 'password_hash', 
-                'profile_picture', 'bio', 
-                'likes_count', 'followers_count', 'following_count', 
-                'is_admin', 'is_confirmed', 'confirmed_on',
-                'posts', 'likes', 'comments', 
-                'followers', 'follows')
-
+        fields = ('id', 'username', 'email', 'password_hash',
+                  'profile_picture', 'bio',
+                  'likes_count', 'followers_count', 'following_count',
+                  'is_admin', 'is_confirmed', 'confirmed_on',
+                  'posts', 'likes', 'comments',
+                  'followers', 'follows')
 
     def get_likes_count(self, user, **kwargs):
         """
@@ -196,6 +195,7 @@ class UserSchema(ma.Schema):
         """
         # Get the number of followers the user has using a query
         return len(user.followers) or 0
+
     def get_following_count(self, user, **kwargs):
         """
         Returns the number of users the given user is following.

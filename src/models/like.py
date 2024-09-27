@@ -21,6 +21,7 @@ created_at : datetime
 from init import db, ma
 from marshmallow import fields
 
+
 class Like(db.Model):
     """
     Represents a like in the database.
@@ -54,6 +55,7 @@ class Like(db.Model):
     user = db.relationship('User', back_populates='likes')
     post = db.relationship('Post', back_populates='likes')
 
+
 class LikeSchema(ma.Schema):
     """
     Schema for serializing and deserializing Like objects.
@@ -81,6 +83,7 @@ class LikeSchema(ma.Schema):
             The model to serialize.
         """
         fields = ('id', 'user_id', 'post_id')
+
 
 like_schema = LikeSchema()
 likes_schema = LikeSchema(many=True)

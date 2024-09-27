@@ -49,13 +49,15 @@ def get_feed():
     posts = Post.query.order_by(Post.created_at.desc())
 
     # Paginate the posts
-    paginated_posts = posts.paginate(page=page, per_page=per_page, error_out=False)
+    paginated_posts = posts.paginate(
+        page=page, per_page=per_page, error_out=False)
 
     # Serialize the paginated posts
     post_arr = posts_schema.jsonify(paginated_posts.items)
 
     # Return the serialized posts
     return post_arr
+
 
 @feed_controller.route('/following', methods=['GET'])
 @jwt_required()
@@ -88,10 +90,12 @@ def get_following_feed():
         return {"message": "No posts found from followed users"}, 200
 
     # Retrieve all posts from users in the followed list
-    posts = Post.query.filter(Post.user_id.in_(followed_ids)).order_by(Post.created_at.desc())
+    posts = Post.query.filter(Post.user_id.in_(
+        followed_ids)).order_by(Post.created_at.desc())
 
     # Paginate the posts
-    paginated_posts = posts.paginate(page=page, per_page=per_page, error_out=False)
+    paginated_posts = posts.paginate(
+        page=page, per_page=per_page, error_out=False)
 
     # Serialize the paginated posts
     post_arr = posts_schema.jsonify(paginated_posts.items)

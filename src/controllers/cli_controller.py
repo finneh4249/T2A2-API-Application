@@ -26,6 +26,7 @@ from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
 
 cli_controller = Blueprint('cli', __name__)
 
+
 @cli_controller.cli.command("create_user")
 @click.argument("username", default="user")
 @click.argument("email", default="user@localhost")
