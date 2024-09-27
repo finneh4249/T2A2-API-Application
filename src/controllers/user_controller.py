@@ -22,7 +22,7 @@ user_controller = Blueprint('user_controller', __name__, url_prefix='/users')
 
 
 @user_controller.route('/', methods=['GET'])
-# TODO: Add Authentication?
+@jwt_required()
 def get_users():
     """
     Gets a list of all users in the database.
@@ -65,6 +65,8 @@ def get_user(user_id):
 def update_user(user_id):
     """
     Updates a user in the database.
+
+    The 
 
     Parameters
     ----------
