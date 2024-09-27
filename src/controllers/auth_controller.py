@@ -60,6 +60,7 @@ def create_user():
     - `username`: The new user's username.
     - `email`: The new user's email address.
     - `password`: The new user's password.
+    - OPTIONAL: `bio`: The new user's bio.
 
     Returns a JSON representation of the newly created user.
     """
@@ -71,6 +72,7 @@ def create_user():
     username = request.json['username']
     email = request.json['email']
     password = request.json['password']
+    bio = request.json['bio'] or null
 
     # Hash the password
     hash_password = bcrypt.generate_password_hash(password).decode('utf-8')
