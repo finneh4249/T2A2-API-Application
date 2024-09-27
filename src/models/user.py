@@ -28,10 +28,24 @@ class User(db.Model):
         Email associated with the user.
     password_hash : str
         Hashed password for the user.
-    profile_picture : str
-        URL of the user's profile picture.
     bio : str
         User's bio.
+    is_admin : bool
+        If the user is an admin.
+    is_confirmed : bool
+        If the user has confirmed their email.
+    confirmed_on : datetime
+        The datetime the user confirmed their email.
+    posts : list[Post]
+        The posts the user has made.
+    likes : list[Like]
+        The likes the user has made.
+    comments : list[Comment]
+        The comments the user has made.
+    follows : list[Follow]
+        The users the user is following.
+    followers : list[Follow]
+        The users that are following the user.
     """
     __tablename__ = 'users'
 
@@ -40,7 +54,6 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
 
-    profile_picture = db.Column(db.String(), nullable=True)
     bio = db.Column(db.String(500), nullable=True)
 
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
@@ -75,6 +88,28 @@ class UserSchema(ma.Schema):
         URL of the user's profile picture.
     bio : str
         User's bio.
+    is_admin : bool
+        If the user is an admin.
+    is_confirmed : bool
+        If the user has confirmed their email.
+    confirmed_on : datetime
+        The datetime the user confirmed their email.
+    posts : list[Post]
+        The posts the user has made.
+    likes : list[Like]
+        The likes the user has made.
+    comments : list[Comment]
+        The comments the user has made.
+    followers : list[Follow]
+        The users that are following the user.
+    follows : list[Follow]
+        The users the user is following.
+    likes_count : int
+        The number of likes the user has made.
+    followers_count : int
+        The number of users following the user.
+    following_count : int
+        The number of users the user is following.
     """
     posts = fields.List(fields.Nested(
         'PostSchema', exclude=['author', 'likes', 'comments']))
@@ -115,52 +150,59 @@ class UserSchema(ma.Schema):
                 'followers', 'follows')
 
 
-    def get_likes_count(self, user, **kwargs):
+    def get_likes_count(self, user: User, **kwargs) -> int:
         """
-        Returns the number of likes a post has.
-    
+        Returns the number of likes a user has.
+
+        This method is used as a field in the UserSchema to
+        include the number of likes a user has in the serialized
+        representation of the user.
+
         Parameters
         ----------
-        post : Post
-            The post to get the like count for.
-    
+        user : User
+            The user to get the like count for.
+
         Returns
         -------
         int
-            The number of likes the post has.
+            The number of likes the user has.
         """
-        return len(user.likes)
+        # Get the number of likes the user has
+        return user.likes.count()
 
     def get_followers_count(self, user, **kwargs):
         """
-        Returns the number of likes a post has.
-    
+        Returns the number of followers a user has.
+
         Parameters
         ----------
-        post : Post
-            The post to get the like count for.
-    
+        user : User
+            The user to get the follower count for.
+
         Returns
         -------
         int
-            The number of likes the post has.
+            The number of followers the user has.
         """
-        return len(user.followers)
+        # Get the number of followers the user has using a query
+        return Follow.query.filter_by(followed_id=user.id).count()
     def get_following_count(self, user, **kwargs):
         """
-        Returns the number of likes a post has.
-    
+        Returns the number of users the given user is following.
+
         Parameters
         ----------
-        post : Post
-            The post to get the like count for.
-    
+        user : User
+            The user to get the following count for.
+
         Returns
         -------
         int
-            The number of likes the post has.
+            The number of users the given user is following.
         """
-        return len(user.follows)
+        # Get the number of users the user is following
+        return Follow.query.filter_by(follower_id=user.id).count()
 
 
 profile_schema = UserSchema(exclude=['password_hash'])
