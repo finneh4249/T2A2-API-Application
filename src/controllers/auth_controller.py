@@ -92,8 +92,9 @@ def create_user():
 
     return {"message": "User created successfully", "user": new_user, "confirmation_url": confirmation_url}
 
+#TODO: Add delete user endpoint
 
-@auth_controller.route('/confirm/<token>', methods=['GET'])
+@auth_controller.route('/confirm/<token>', methods=['POST'])
 def confirm(token):
     """
     Confirms a user's account.
@@ -127,7 +128,7 @@ def confirm(token):
 
 
 #TODO: Check for bugs
-@auth_controller.route('/forgot_password', methods=['GET'], endpoint="forgot_user_password")
+@auth_controller.route('/forgot-password', methods=['GET'], endpoint="forgot_user_password")
 @jwt_required()
 def forgot_password():
     """
@@ -152,12 +153,12 @@ def forgot_password():
     token = create_access_token(identity=user_id)
 
     # Send the password reset email
-    reset_url = f"{request.url_root}auth/reset_password/{token}"
+    reset_url = f"{request.url_root}auth/reset-password/{token}"
 
     return {"message": "Password reset link created", "reset_url": reset_url}
 
 # TODO: Check for bugs
-@auth_controller.route('/reset_password/<token>', methods=['PUT', 'PATCH'], endpoint='reset_user_password_confirm')
+@auth_controller.route('/reset-password/<token>', methods=['PUT', 'PATCH'], endpoint='reset_user_password_confirm')
 def reset_password(token):
     """
     Resets a user's password.
@@ -193,7 +194,7 @@ def reset_password(token):
     # Return the updated user
     return {"message": "Password reset successfully", "user": profile_schema.dump(user)}
 
-@auth_controller.route('/change_password', methods=['PUT', 'PATCH'], endpoint="change_user_password")
+@auth_controller.route('/change-password', methods=['PUT', 'PATCH'], endpoint="change_user_password")
 @jwt_required()
 def change_password():
     """
