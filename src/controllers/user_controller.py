@@ -14,7 +14,7 @@ The endpoints are:
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from init import db, bcrypt
+from init import db
 
 from models.user import User, user_schema, users_schema, profile_schema, UserSchema
 from models.post import Post, posts_schema
@@ -33,9 +33,17 @@ def get_users():
         A list of all users in the database.
     """
     # TODO: Add pagination
+     # Get the page number from the request query parameters, default to 1
+    page = request.args.get('page', 1, type=int)
+
+    # Get the number of posts to retrieve per page from the request query
+    # parameters, default to 10
+    per_page = request.args.get('per_page', 10, type=int)
+
 
     users = User.query.all()
-    user_arr = users_schema.jsonify(users)
+    paginated_users = users.paginate(page=page, per_page=per_page, error_out=False)
+    user_arr = users_schema.jsonify(paginated_users.items)
     return user_arr
 
 

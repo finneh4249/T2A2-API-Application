@@ -1,6 +1,16 @@
 """
+This module contains the API endpoints for post-related operations.
+
+The endpoints are:
+
+- **GET /posts**: Get a list of all posts.
+- **GET /posts/{post_id}**: Get a post by ID.
+- **POST /posts**: Create a new post.
+- **PUT /posts/{post_id}**: Update a post.
+- **DELETE /posts/{post_id}**: Delete a post.
 
 """
+
 from datetime import datetime
 
 from flask import Blueprint, request
@@ -8,8 +18,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from init import db
 from utils import admin_required
-from models.post import Post, post_schema, posts_schema, PostSchema
-from models.like import Like, likes_schema
+from models.post import Post, post_schema, posts_schema
+from models.like import likes_schema
 
 
 
@@ -19,7 +29,7 @@ post_controller = Blueprint('post_controller', __name__, url_prefix='/posts')
 @post_controller.route('/', methods=['GET'])
 @jwt_required()
 @admin_required
-def get_posts():
+def get_all_posts():
     """
     Gets a list of all posts in the database.
 
@@ -32,7 +42,31 @@ def get_posts():
     post_arr = posts_schema.dump(posts)
     return {"message": "Posts retrieved successfully", "data": post_arr}
 
-@post_controller.route('/create', methods=['POST'])
+
+@post_controller.route('/<int:post_id>', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_post(post_id):
+    """
+    Gets a post by ID.
+
+    Parameters
+    ----------
+    post_id : int
+        The ID of the post to retrieve.
+
+    Returns
+    -------
+    Post
+        The post with the given ID.
+    """
+    post = Post.query.get(post_id)
+    if not post:
+        return {"message": "Post not found"}, 404
+    post_arr = post_schema.dump(post)
+    return {"message": "Post retrieved successfully", "data": post_arr}
+
+@post_controller.route('/', methods=['POST'])
 @jwt_required()
 def create_post():
     """
@@ -53,28 +87,6 @@ def create_post():
     db.session.commit()
 
     return post_schema.dump(new_post)
-
-@post_controller.route('/<int:post_id>', methods=['GET'])
-@jwt_required()
-def get_post(post_id):
-    """
-    Gets a specific post in the database.
-
-    Parameters
-    ----------
-    post_id : int
-        The ID of the post to get.
-
-    Returns
-    -------
-    Post
-        The post with the specified ID.
-    """
-    post = Post.query.get(post_id)
-    if not post:
-        return {"message": "Post not found"}, 404
-
-    return post_schema.dump(post)
 
 
 @post_controller.route('/<int:post_id>', methods=['PUT', 'PATCH'])
