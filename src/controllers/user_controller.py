@@ -14,12 +14,15 @@ The endpoints are:
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from init import db
-from models.user import User, user_schema, users_schema
+from init import db, bcrypt
 
+from models.user import User, user_schema, users_schema, profile_schema, UserSchema
+from models.post import Post, posts_schema
 user_controller = Blueprint('user_controller', __name__, url_prefix='/users')
 
+
 @user_controller.route('/', methods=['GET'])
+@jwt_required()
 def get_users():
     """
     Gets a list of all users in the database.
@@ -30,27 +33,94 @@ def get_users():
         A list of all users in the database.
     """
     users = User.query.all()
-    return users_schema.jsonify(users)
+    user_arr = users_schema.jsonify(users)
+    return user_arr
 
-@user_controller.route('/', methods=['POST'])
-def create_user():
+
+@user_controller.route('/<user_id>/profile', methods=['GET'])
+@jwt_required()
+def get_user(user_id):
     """
-    Creates a new user in the database.
+    Gets a specific user in the database.
 
-    Request body must contain the following JSON keys:
+    Parameters
+    ----------
+    user_id : int
+        The ID of the user to get.
 
-    - `username`: The new user's username.
-    - `email`: The new user's email address.
-    - `password`: The new user's password.
-
-    Returns a JSON representation of the newly created user.
+    Returns
+    -------
+    User
+        The user with the specified ID.
     """
-    username = request.json['username']
-    email = request.json['email']
-    password = request.json['password']
+    user = User.query.get(user_id)
+    if not user:
+        return 'User not found', 404
 
-    user = User(username=username, email=email, password_hash=password)
-    db.session.add(user)
+    return profile_schema.jsonify(user)
+
+
+@user_controller.route('/<user_id>/profile', methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_user(user_id):
+    """
+    Updates a user in the database.
+
+    The 
+
+    Parameters
+    ----------
+    user_id : int
+        The ID of the user to update.
+
+    Returns
+    -------
+    User
+        The updated user.
+    """
+    user = User.query.get(user_id)
+    if not user:
+        return 'User not found', 404
+
+    if user.id != get_jwt_identity() and not user.is_admin:
+        return 'Unauthorized', 401
+
+    data = request.json
+
+    user.username = data['username'] or user.username
+    user.email = data['email'] or user.email
+    user.profile_picture = data['profile_picture'] or user.profile_picture
+    user.bio = data['bio'] or user.bio
+
     db.session.commit()
 
-    return user_schema.jsonify(user)
+    profile = profile_schema.dump(user)
+    message = f"User {user.username} updated successfully."
+    return {"message": message, "user": profile}
+
+
+@user_controller.route('/<user_id>/timeline', methods=['GET'])
+@jwt_required()
+def get_user_timeline(user_id):
+    """
+    Gets a user's timeline.
+
+    Parameters
+    ----------
+    user_id : int
+        The ID of the user whose timeline to get.
+
+    Returns
+    -------
+    list of Post
+        The user's timeline.
+    """
+    user = User.query.get(user_id)
+    if not user:
+        return 'User not found', 404
+
+    posts = Post.query.filter_by(author_id=user_id).order_by(
+        Post.created_at.desc()).all()
+    post_arr = posts_schema.dump(posts)
+    return post_arr
+
