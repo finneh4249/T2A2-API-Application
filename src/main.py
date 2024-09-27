@@ -6,9 +6,11 @@ Contains the code that creates and configures the Flask application.
 import os
 
 from flask import Flask
+from marshmallow import ValidationError
 
 from init import db, ma, bcrypt, jwt, mail
 from controllers import cli, auth, user, post, feed, comment, like, follow
+
 
 
 def create_app():
@@ -74,8 +76,49 @@ def create_app():
 
     app.register_blueprint(follow)
 
-    # Set the app's secret key
+    @app.errorhandler(ValidationError)
+    def handle_validation_error(error):
+        """Handle a validation error by returning a 400 error response.
 
+        This function is an error handler for validation errors. It
+        takes a ValidationError object as an argument and returns a
+        400 error response with a JSON body containing the error
+        messages.
+
+        Parameters
+        ----------
+        error : ValidationError
+            The ValidationError object.
+
+        Returns
+        -------
+        tuple
+            A 400 error response with a JSON body containing the error
+            messages.
+        """
+        return {"error": error.messages}, 400
+
+    @app.errorhandler(Exception)
+    def handle_sqlalchemy_error(error):
+        """Handle a SQLAlchemy error by returning a 500 error response.
+
+        This function is an error handler for SQLAlchemy errors. It
+        takes an Exception object as an argument and returns a 500 error
+        response with a JSON body containing the error message.
+
+        Parameters
+        ----------
+        error : Exception
+            The Exception object.
+
+        Returns
+        -------
+        tuple
+            A 500 error response with a JSON body containing the error
+            message.
+        """
+        return {"error": str(error)}, 500
+        
     # Return the configured Flask application
     return app
 
