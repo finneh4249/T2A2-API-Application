@@ -32,6 +32,8 @@ def get_users():
     list of User
         A list of all users in the database.
     """
+    # TODO: Add pagination
+
     users = User.query.all()
     user_arr = users_schema.jsonify(users)
     return user_arr
@@ -89,7 +91,6 @@ def update_user(user_id):
 
     user.username = data['username'] or user.username
     user.email = data['email'] or user.email
-    user.profile_picture = data['profile_picture'] or user.profile_picture
     user.bio = data['bio'] or user.bio
 
     db.session.commit()
