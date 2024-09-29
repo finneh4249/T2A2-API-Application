@@ -9,7 +9,7 @@ from flask import Flask
 from marshmallow import ValidationError
 
 from init import db, ma, bcrypt, jwt
-from controllers import cli, auth, user, post, feed, comment, like, follow
+from controllers import cli, auth, user, post, feed
 
 
 
@@ -61,13 +61,9 @@ def create_app():
     # Register the post blueprint
     app.register_blueprint(post)
 
+    # Register the feed blueprint
     app.register_blueprint(feed)
 
-    app.register_blueprint(comment)
-
-    app.register_blueprint(like)
-
-    app.register_blueprint(follow)
 
     @app.errorhandler(ValidationError)
     def handle_validation_error(error):
