@@ -144,9 +144,9 @@ class UserSchema(ma.Schema):
     likes = fields.List(fields.Nested('LikeSchema', exclude=['user_id']))
     comments = fields.List(fields.Nested('CommentSchema', exclude=['user_id']))
     followers = fields.List(fields.Nested(
-        'FollowSchema', exclude=['followed_id']))
-    follows = fields.List(fields.Nested(
         'FollowSchema', exclude=['follower_id']))
+    follows = fields.List(fields.Nested(
+        'FollowSchema', exclude=['followed_id']))
 
     likes_count = fields.Method(serialize="get_likes_count")
     followers_count = fields.Method(serialize="get_followers_count")
