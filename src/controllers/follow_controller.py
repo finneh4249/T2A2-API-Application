@@ -16,7 +16,7 @@ from models.user import User, users_schema
 
 
 follow_controller = Blueprint(
-    'follow_controller', __name__, url_prefix='/users/<int:user_id>')
+    'follow_controller', __name__, url_prefix='/<int:user_id>')
 
 
 @follow_controller.route('/following', methods=['GET'], endpoint='get_following')

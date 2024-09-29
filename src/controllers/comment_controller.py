@@ -19,7 +19,7 @@ from models.comment import Comment, comment_schema, comments_schema
 from models.post import Post
 
 comment_controller = Blueprint(
-    'comment_controller', __name__, url_prefix='/posts/<int:post_id>/comments')
+    'comment_controller', __name__, url_prefix='/<int:post_id>/comments')
 
 
 @comment_controller.route('/', methods=['GET'])
