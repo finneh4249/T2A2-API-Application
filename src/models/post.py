@@ -54,7 +54,7 @@ class Post(db.Model):
 
     author = db.relationship('User', back_populates='posts')
     comments = db.relationship('Comment', back_populates='post', cascades='all, delete-orphan')
-    likes = db.relationship('Like', back_populates='post' cascades='all, delete-orphan')
+    likes = db.relationship('Like', back_populates='post', cascades='all, delete-orphan')
 
 
 class PostSchema(ma.Schema):
