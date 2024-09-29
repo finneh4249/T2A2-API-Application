@@ -18,7 +18,10 @@ from init import db
 
 from models.user import User, user_schema, users_schema, profile_schema
 from models.post import Post, posts_schema
+from .follow_controller import follow_controller
 user_controller = Blueprint('user_controller', __name__, url_prefix='/users')
+
+user_controller.register_blueprint(follow_controller)
 
 
 @user_controller.route('/', methods=['GET'])

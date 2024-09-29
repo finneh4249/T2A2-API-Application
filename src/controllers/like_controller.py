@@ -16,7 +16,7 @@ from models.like import Like, likes_schema
 
 
 like_controller = Blueprint(
-    'like_controller', __name__, url_prefix='/posts/<int:post_id>')
+    'like_controller', __name__, url_prefix='/<int:post_id>')
 
 
 @like_controller.route('/like', methods=['POST'])
