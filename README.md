@@ -275,15 +275,15 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Example Response:**
     ```json
     {
-  "message": "User created successfully",
-  "user": {
-    "id": 3,
-    "username": "newuser",
-    "email": "newuser@example.com"
-  },
-  "confirmation_url": "http://localhost:5555/auth/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY"
-}
-    ```
+      "message": "User created successfully",
+      "user": {
+        "id": 3,
+        "username": "newuser",
+        "email": "newuser@example.com"
+      },
+      "confirmation_url": "http://localhost:5555/auth/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY"
+    }
+  ```
 
 - **POST /auth/confirm/{token}**
   - **HTTP Method:** POST
@@ -293,14 +293,17 @@ The ERD illustrates the draft of the relationships between entities in the datab
   - **Example Request:**
   ```bash
   curl -X POST http://localhost:5000/auth/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY
-  ```
-  - **Example Response:**
-  ```json
-  {
-    "message": "Email confirmed successfully"
-  }
-  ```
-  - 
+```
+
+- **Example Response:**
+
+```json
+{
+  "message": "Email confirmed successfully"
+}
+```
+
+-
 - **GET /auth/forgot-password**
   - **HTTP Method:** GET
   - **Request Parameters:**
@@ -311,36 +314,40 @@ The ERD illustrates the draft of the relationships between entities in the datab
   curl -X GET http://localhost:5000/auth/forgot-password?user_id=1
   ```
   - **Example Response:**
-   ```json
-   {
-     "message": "Password reset link created. Normally this would be sent to your email. For the purposes of this assignment, the link will be displayed here.",
-     "reset_url": "http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY"
-   }
-   ```
+  ```json
+  {
+    "message": "Password reset link created. Normally this would be sent to your email. For the purposes of this assignment, the link will be displayed here.",
+    "reset_url": "http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY"
+  }
+  ```
 - **PUT/PATCH /auth/reset-password/{token}**
   - **HTTP Method:** PUT/PATCH
   - **Request Parameters:**
     - `token`: (In URL) Token to reset the user's password
     - `password`: New password for the user.
   - **Example Request:**
+
 ```bash
 curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY
 ```
-  - **Example Response:**
-  ```json
-  {
-    "message": "Password reset successful",
-    "user":{
-      "id": 1,
-      "username": "john_doe",
-      "email": "john@example.com",
-      "bio": "I like trainZ",
-      "is_admin": false,
-      "is_confirmed": true,
-      "created_at": "2022-02-22T20:30:00.000000",
-    }
+
+- **Example Response:**
+
+```json
+{
+  "message": "Password reset successful",
+  "user": {
+    "id": 1,
+    "username": "john_doe",
+    "email": "john@example.com",
+    "bio": "I like trainZ",
+    "is_admin": false,
+    "is_confirmed": true,
+    "created_at": "2022-02-22T20:30:00.000000"
   }
-  ```
+}
+```
+
 - **PUT/PATCH /auth/change-password**
   - **HTTP Method:** PUT/PATCH
   - **Request Parameters:**
@@ -355,14 +362,14 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
   ```json
   {
     "message": "Password changed successfully",
-    "user":{
+    "user": {
       "id": 1,
       "username": "john_doe",
       "email": "john@example.com",
       "bio": "I like trainZ",
       "is_admin": false,
       "is_confirmed": true,
-      "created_at": "2022-02-22T20:30:00.000000",
+      "created_at": "2022-02-22T20:30:00.000000"
     }
   }
   ```
@@ -500,6 +507,7 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
     ```bash
     curl -X DELETE http://localhost:5000/posts/1 -H "Authorization: Bearer <your_token>"
     ```
+
 ### **Feed**
 
 - **GET /feed**
@@ -509,12 +517,15 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
     - `?per_page`: (Optional) Number of posts per page
   - **Authorization**: JWT token required in the `Authorization` header
   - **Example Request:**
+
 ```bash
 curl http://localhost:5000/feed -H "Authorization: Bearer <your_token>"
 ```
-  - **Example Response:**
+
+- **Example Response:**
+
 ```json
-  [
+[
   {
     "id": 3,
     "title": "Superman Test Post",
@@ -599,6 +610,7 @@ curl http://localhost:5000/feed -H "Authorization: Bearer <your_token>"
   }
 ]
 ```
+
 - **GET /feed/following**
   - **HTTP Method:** GET
   - **Request Parameters:**
@@ -606,12 +618,15 @@ curl http://localhost:5000/feed -H "Authorization: Bearer <your_token>"
     - `?per_page`: (Optional) Number of posts per page
   - **Authorization**: JWT token required in the `Authorization` header
   - **Example Request:**
+
 ```bash
 curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>"
 ```
-  - **Example Response:**
+
+- **Example Response:**
+
 ```json
-  [
+[
   {
     "id": 3,
     "title": "Superman Test Post",
@@ -696,6 +711,7 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
   }
 ]
 ```
+
 ### **Comments**
 
 - **GET /posts/{post_id}/comments**
@@ -813,11 +829,12 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
     curl -X DELETE http://localhost:5000/posts/1/likes -H "Authorization: Bearer <your_token>"
     ```
   - **Example Response:**
+
 ```json
-  {
-    "message": "Post unliked successfully"
-  }
-  ```
+{
+  "message": "Post unliked successfully"
+}
+```
 
 - **GET /posts/{post_id}/likes**
 
@@ -825,10 +842,13 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
   - **Request Parameters:**
   - **Response Format:** No response body
   - **Example Request:**
+
   ```bash
   curl http://localhost:5000/posts/1/likes -H "Authorization: Bearer <your_token>"
   ```
+
   - **Example Response:**
+
   ```json
   {
     "likes": [
@@ -941,19 +961,22 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
    Rename the `.env.example` file to `.env`.
 
 7. **Create the database:**
-  In order to create the database, use the following commands:
+   In order to create the database, use the following commands:
 
-  ```bash
-    flask cli db_create
-  ```
+```bash
+  flask cli db_create
+```
+
 This command will create all the tables in the database, and seed it with default values.
 
 8. **Run the application:**
-  ```bash
-  flask run
-  ```
+
+```bash
+flask run
+```
+
 9.  **Access API endpoints:**
-   Use your preferred HTTP client (e.g., Postman, curl, Insomnia, etc) to interact with the API endpoints.
+    Use your preferred HTTP client (e.g., Postman, curl, Insomnia, etc) to interact with the API endpoints.
 
 ## Additional Information
 
@@ -975,7 +998,7 @@ def get_user(user_id):
     return {"message": "User not found"}, 404
 ```
 
-In this example, the code attempts to retrieve the user with the specified user_id. If the user is not found, a `404 Not Found` error is raised. 
+In this example, the code attempts to retrieve the user with the specified user_id. If the user is not found, a `404 Not Found` error is raised.
 Other errors that may commonly occur during the execution of the code are handled in the same way, for example, a `401 Unauthorized` error is returned if the user is not the owner of the requested resource.
 
 With the exception of a `Marshamallow Validation Error`, if any other exception occurs, a generic `500 Internal Server Error` is returned with an error message.
