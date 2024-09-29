@@ -69,14 +69,33 @@ class User(db.Model):
     is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
 
-    posts = db.relationship('Post', back_populates='author')
-    likes = db.relationship('Like', back_populates='user')
-    comments = db.relationship('Comment', back_populates='user')
+    posts = db.relationship(
+        'Post',
+        back_populates='author',
+        cascade='all, delete-orphan'
+    )
+    likes = db.relationship(
+        'Like',
+        back_populates='user',
+        cascade='all, delete-orphan')
+    comments = db.relationship(
+        'Comment',
+        back_populates='user',
+        cascade='all, delete-orphan'
+    )
 
     follows = db.relationship(
-        'Follow', foreign_keys='Follow.followed_id', back_populates='follows')
+        'Follow',
+        foreign_keys='Follow.followed_id',
+        back_populates='follows',
+        cascade='all, delete-orphan'
+    )
     followers = db.relationship(
-        'Follow', foreign_keys='Follow.follower_id', back_populates='follower')
+        'Follow',
+        foreign_keys='Follow.follower_id',
+        back_populates='follower',
+        cascade='all, delete-orphan'
+    )
 
 
 class UserSchema(ma.Schema):
