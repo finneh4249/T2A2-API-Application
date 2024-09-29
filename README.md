@@ -164,7 +164,6 @@ The ERD illustrates the draft of the relationships between entities in the datab
       }
     ]
     ```
-
 - **GET /users/{user_id}/profile**
 
   - **HTTP Method:** GET
@@ -188,7 +187,6 @@ The ERD illustrates the draft of the relationships between entities in the datab
       "bio": "This is user 1."
     }
     ```
-
 - **PUT/PATCH /users/{user_id}/profile**
 
   - **HTTP Method:** PUT / PATCH
@@ -212,15 +210,16 @@ The ERD illustrates the draft of the relationships between entities in the datab
       "bio": "This is user 1."
     }
     ```
-
 - **GET /users/{user_id}/timeline**
 
   - **HTTP Method:** GET
   - **Request Parameters:**
+
     - `user_id`: ID of the user to retrieve
   - **Authorization**: JWT token required in the `Authorization` header
   - **Response Format:** JSON array of post objects (id, user_id, content, created_at, updated_at, likes_count, comments_count)
   - **Example Request:**
+
     ```
     curl -H "Authorization: Bearer <your_token>" http://localhost:5000/users/1/timeline
     ```
@@ -243,16 +242,20 @@ The ERD illustrates the draft of the relationships between entities in the datab
 ### **Authentication**
 
 - **POST /auth/login**
+
   - **HTTP Method:** POST
   - **Request Parameters:**
     - `username`: The username of the user
     - `password`: The password of the userq
   - **Response Format:** JSON object representing the logged-in user
   - **Example Request:**
+
   ```bash
   curl -X POST http://localhost:5000/auth/login -d '{"username": "john_doe", "password": "password123"}'
   ```
+
   - **Example Response:**
+
   ```json
   {
     "message": "User john_doe logged in successfully",
@@ -283,16 +286,23 @@ The ERD illustrates the draft of the relationships between entities in the datab
       },
       "confirmation_url": "http://localhost:5555/auth/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY"
     }
+    ```
+
   ```
 
+  ```
 - **POST /auth/confirm/{token}**
+
   - **HTTP Method:** POST
   - **Request Parameters:**
     - `token`: Token to confirm the user's email address
   - **Response Format:** No response body
   - **Example Request:**
+
   ```bash
   curl -X POST http://localhost:5000/auth/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNzQxNTEzOCwianRpIjoiN2I4YzdhYjgtYjNiZS00YzMxLWJjZjQtODdkZTJjNzBkZjVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6NSwibmJmIjoxNzI3NDE1MTM4LCJjc3JmIjoiMTI4ZDMyYzItNDc5Ni00MTYxLTk2ZGEtODAzYmZkZmMxMjQzIiwiZXhwIjoxNzI3NDE2MDM4fQ.RDPX_RIAJ7MoM3F103Q8cYS_8v_6SNMbaw9c3GI_9yY
+  ```
+
 ```
 
 - **Example Response:**
@@ -303,17 +313,21 @@ The ERD illustrates the draft of the relationships between entities in the datab
 }
 ```
 
--
+- 
 - **GET /auth/forgot-password**
+
   - **HTTP Method:** GET
   - **Request Parameters:**
     - `?user_id`: ID of the user to reset the password
   - **Response Format:** No response body
   - **Example Request:**
+
   ```bash
   curl -X GET http://localhost:5000/auth/forgot-password?user_id=1
   ```
+
   - **Example Response:**
+
   ```json
   {
     "message": "Password reset link created. Normally this would be sent to your email. For the purposes of this assignment, the link will be displayed here.",
@@ -321,6 +335,7 @@ The ERD illustrates the draft of the relationships between entities in the datab
   }
   ```
 - **PUT/PATCH /auth/reset-password/{token}**
+
   - **HTTP Method:** PUT/PATCH
   - **Request Parameters:**
     - `token`: (In URL) Token to reset the user's password
@@ -349,16 +364,20 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
 ```
 
 - **PUT/PATCH /auth/change-password**
+
   - **HTTP Method:** PUT/PATCH
   - **Request Parameters:**
     - `old_password`: Old password for the user.
     - `new_password`: New password for the user.
   - **Authorization**: JWT token required in the `Authorization` header
   - **Example Request:**
+
   ```bash
   curl -X http://localhost:5000/auth/change-password -H "Authorization: Bearer <your_token>" -d '{"old_password": "old_password", "new_password": "new_password"}'
   ```
+
   - **Example Response:**
+
   ```json
   {
     "message": "Password changed successfully",
@@ -373,7 +392,6 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
     }
   }
   ```
--
 - **DELETE /auth/unregister**
 
   - **HTTP Method:** DELETE
@@ -423,7 +441,6 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
       }
     ]
     ```
-
 - **GET /posts/{post_id}**
 
   - **HTTP Method:** GET
@@ -448,7 +465,6 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
       "comments_count": 0
     }
     ```
-
 - **POST /posts**
 
   - **HTTP Method:** POST
@@ -472,7 +488,6 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
       "comments_count": 0
     }
     ```
-
 - **PUT / PATCH /posts/{post_id}**
 
   - **HTTP Method:** PUT / PATCH
@@ -496,7 +511,6 @@ curl -X http://localhost:5000/auth/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
       "comments_count": 0
     }
     ```
-
 - **DELETE /posts/{post_id}**
 
   - **HTTP Method:** DELETE
@@ -747,7 +761,6 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
       }
     ]
     ```
-
 - **POST /posts/{post_id}/comments**
 
   - **HTTP Method:** POST
@@ -770,7 +783,6 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
       "updated_at": "2024-01-01T00:03:00Z"
     }
     ```
-
 - **PUT /posts/{post_id}/comments/{comment_id}**
 
   - **HTTP Method:** PUT
@@ -793,7 +805,6 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
       "updated_at": "2024-01-01T00:03:00Z"
     }
     ```
-
 - **DELETE /posts/{post_id}comments/{comment_id}**
 
   - **HTTP Method:** DELETE
@@ -817,7 +828,6 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
     ```
     curl -X POST http://localhost:5000/posts/1/likes -H "Authorization: Bearer <your_token>"
     ```
-
 - **DELETE /posts/{post_id}/like**
 
   - **HTTP Method:** DELETE
@@ -878,7 +888,6 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
     ```
     curl -X POST http://localhost:5000/users/2/follow
     ```
-
 - **DELETE /users/{user_id}/follow**
 
   - **HTTP Method:** DELETE
@@ -909,7 +918,6 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
      brew install postgresql
      ```
    - **Linux:** Consult your distribution's package manager for installation instructions.
-
 2. **Create a PostgreSQL user and database:**
 
    - Open the PostgreSQL command-line interface (psql).
@@ -936,30 +944,25 @@ curl http://localhost:5000/feed/following -H "Authorization: Bearer <your_token>
    ```sql
    GRANT USAGE ON SCHEMA public TO your_username;
    ```
-
 3. **Clone the repository:**
 
    ```bash
    git clone https://github.com/finneh4249/t2a2-api-application.git
    ```
-
 4. **Create a virtual environment:**
 
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\bin\activate.ps1
    ```
-
 5. **Install dependencies:**
 
    ```bash
    pip install -r requirements.txt
    ```
-
 6. **Configure database settings:**
    Update the `.env.example` file with your database connection details, including the username, password, database name, and host.
    Rename the `.env.example` file to `.env`.
-
 7. **Create the database:**
    In order to create the database, use the following commands:
 
@@ -975,8 +978,8 @@ This command will create all the tables in the database, and seed it with defaul
 flask run
 ```
 
-9.  **Access API endpoints:**
-    Use your preferred HTTP client (e.g., Postman, curl, Insomnia, etc) to interact with the API endpoints.
+9. **Access API endpoints:**
+   Use your preferred HTTP client (e.g., Postman, curl, Insomnia, etc) to interact with the API endpoints.
 
 ## Additional Information
 
